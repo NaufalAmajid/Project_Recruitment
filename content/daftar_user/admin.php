@@ -1,3 +1,7 @@
+<?php
+require_once 'classes/User.php';
+$users = new User();
+?>
 <div class="card-header">
     <div class="d-flex align-items-center">
         <div>
@@ -25,34 +29,41 @@
         <table id="table-list-admin" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
+                    <th>No</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Nama</th>
+                    <th>Status</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                </tr>
+                <?php
+                $admins = $users->getAllUserAccount('where ro.id_role = 1');
+                $no = 1;
+                ?>
+                <?php foreach ($admins as $admin) : ?>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $admin['username'] ?></td>
+                        <td><?= $admin['email'] ?></td>
+                        <td><?= $admin['nama_user'] ?></td>
+                        <td><?= $admin['is_active'] ?></td>
+                        <td></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-            </tfoot>
         </table>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        var table = $('#table-list-admin').DataTable({
+            lengthChange: false,
+            buttons: ['copy', 'excel', 'pdf', 'print']
+        });
+
+        table.buttons().container()
+            .appendTo('#table-list-admin_wrapper .col-md-6:eq(0)');
+    });
+</script>

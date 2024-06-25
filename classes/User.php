@@ -22,6 +22,14 @@ class User
         return $ret;
     }
 
+    public function updateUser($table, $data, $where)
+    {
+        $db = DB::getInstance();
+        $res = $db->update($table, $data, $where);
+
+        return $res;
+    }
+
     public function checkUser($where)
     {
         $query = "SELECT * FROM user WHERE (username = :username OR email = :email) AND is_active = 1 AND role_id = :role_id";
@@ -34,18 +42,21 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getAllUserAccount()
+    public function getAllUserAccount($where = null)
     {
+        $where = is_null($where) ? '' : $where;
         $query = "select
                         usr.username,
                         usr.email,
+                        usr.id_user,
                         case
                             when da.nama is not null then da.nama
                             when dh.nama is not null then dh.nama
                             when dk.nama is not null then dk.nama
                         end as nama_user,
                         ro.nama_role,
-                        usr.is_active 
+                        usr.is_active,
+                        dk.* 
                     from
                         user usr
                     left join detail_admin da on
@@ -55,7 +66,8 @@ class User
                     left join detail_karyawan dk on
                         usr.id_user = dk.user_id
                     join role ro on
-                        usr.role_id = ro.id_role";
+                        usr.role_id = ro.id_role
+                    $where";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -102,5 +114,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo json_encode(['status' => 'error', 'message' => 'User gagal ditambahkan!', 'icon' => 'bx bx-error']);
         }
+    }
+
+    if ($_POST['action'] = 'changeStatusUser') {
+        $success = 0;
+        $failed = 0;
+        foreach ($_POST['group_action'] as $id) {
+            $data = [
+                'is_active' => $_POST['status']
+            ];
+            $where = [
+                'id_user' => $id
+            ];
+            $update = $user->updateUser('user', $data, $where);
+            if ($update) {
+                $success++;
+            } else {
+                $failed++;
+            }
+        }
+
+        $msg = $success . ' user berhasil di' . ($_POST['status'] == 1 ? 'aktifkan' : 'non-aktifkan');
+
+        if ($failed > 0) {
+            $msg .= ', ' . $failed . ' gagal di' . ($_POST['status'] == 1 ? 'aktifkan' : 'non-aktifkan');
+        } else {
+            $msg .= '!';
+        }
+
+        echo json_encode(['status' => 'success', 'message' => $msg, 'icon' => 'bx bx-check']);
     }
 }

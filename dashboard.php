@@ -227,6 +227,9 @@ require_once 'classes/Menu.php';
 				?>
 			</div>
 		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true"></div>
+		<!-- End Modal -->
 		<!--end page wrapper -->
 		<!--start overlay-->
 		<div class="overlay toggle-icon"></div>
@@ -254,6 +257,11 @@ require_once 'classes/Menu.php';
 	<script src="assets/plugins/notifications/js/notifications.min.js"></script>
 	<!--app JS-->
 	<script src="assets/js/app.js"></script>
+	<script>
+		$(function() {
+			$('[data-bs-toggle="tooltip"]').tooltip();
+		})
+	</script>
 </body>
 
 </html>

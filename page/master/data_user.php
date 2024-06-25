@@ -50,6 +50,16 @@ $roles = new Roles();
                     <div>
                         <h6 class="mb-0">Daftar User Aktif dan Non-aktif</h6>
                     </div>
+                    <div class="dropdown ms-auto">
+                        <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="javascript:;" onclick="changeStatusUser(1)">Aktifkan User</a>
+                            </li>
+                            <li><a class="dropdown-item" href="javascript:;" onclick="changeStatusUser(0)">Non Aktifkan User</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -57,12 +67,14 @@ $roles = new Roles();
                     <table id="table-list-user" class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <td>#</td>
                                 <th>No</th>
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Nama</th>
                                 <th>Role</th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <?php
@@ -72,12 +84,35 @@ $roles = new Roles();
                         <tbody>
                             <?php foreach ($users->getAllUserAccount() as $user) : ?>
                                 <tr>
+                                    <th align="center">
+                                        <div class="form-check form-check-<?= $user['is_active'] == 1 ? 'danger' : 'success' ?>">
+                                            <input class="form-check-input" type="checkbox" value="<?= $user['id_user'] ?>" id="group_action_<?= $user['id_user'] ?>" name="group_action[]">
+                                        </div>
+                                    </th>
                                     <td><?= $no++ ?></td>
                                     <td><?= $user['username'] ?></td>
                                     <td><?= $user['email'] ?></td>
                                     <td><?= $user['nama_user'] ?></td>
                                     <td><?= $user['nama_role'] ?></td>
-                                    <td><?= $user['is_active'] == 1 ? 'Aktif' : 'Non-aktif' ?></td>
+                                    <td>
+                                        <?php if ($user['is_active'] == 1) : ?>
+                                            <span class="badge bg-success">Aktif</span>
+                                        <?php else : ?>
+                                            <span class="badge bg-danger">Non-aktif</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($user['is_active'] == 1) : ?>
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail user" onclick="detailUser('<?= $user['id_user'] ?>')"><i class="bx bx-info-circle"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="non-aktifkan"><i class="bx bx-user-x"></i>
+                                                </button>
+                                            </div>
+                                        <?php else : ?>
+                                            <a href="javascript:;" class="text-primary fs-4" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="aktifkan"><i class="bx bx-rotate-left"></i></a>
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -100,5 +135,71 @@ $roles = new Roles();
 
     function toMenu(url) {
         window.location.href = url;
+    }
+
+    function changeStatusUser(status) {
+        var group_action = [];
+        $("input[name='group_action[]']:checked").each(function() {
+            group_action.push($(this).val());
+        });
+
+        if (group_action.length == 0) {
+            Lobibox.notify('warning', {
+                pauseDelayOnHover: true,
+                size: 'mini',
+                rounded: true,
+                delayIndicator: false,
+                delay: 2500,
+                icon: 'bx bx-error',
+                continueDelayOnInactiveTab: false,
+                sound: false,
+                position: 'center top',
+                msg: `Pilih user yang akan di${status == 1 ? 'aktifkan' : 'non-aktifkan'}!`
+            });
+            return;
+        } else {
+            $.ajax({
+                url: 'classes/User.php',
+                type: 'POST',
+                data: {
+                    group_action: group_action,
+                    status: status,
+                    action: 'changeStatusUser'
+                },
+                success: function(response) {
+                    let result = JSON.parse(response);
+                    Lobibox.notify(`${result.status}`, {
+                        pauseDelayOnHover: true,
+                        size: 'mini',
+                        rounded: true,
+                        delayIndicator: false,
+                        delay: 2500,
+                        icon: `${result.icon}`,
+                        continueDelayOnInactiveTab: false,
+                        sound: false,
+                        position: 'center top',
+                        msg: `${result.message}`
+                    });
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2500);
+                }
+            });
+        }
+    }
+
+    function detailUser(id_user, id_role) {
+        $.ajax({
+            url: 'content/modal-detail-user.php',
+            type: 'POST',
+            data: {
+                id_user: id_user,
+                id_role: id_role
+            },
+            success: function(response) {
+                $('#myModal').html(response);
+                $('#myModal').modal('show');
+            }
+        });
     }
 </script>
