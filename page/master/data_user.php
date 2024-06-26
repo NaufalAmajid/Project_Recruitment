@@ -84,7 +84,7 @@ $roles = new Roles();
                         <tbody>
                             <?php foreach ($users->getAllUserAccount() as $user) : ?>
                                 <tr>
-                                    <th align="center">
+                                    <th>
                                         <div class="form-check form-check-<?= $user['is_active'] == 1 ? 'danger' : 'success' ?>">
                                             <input class="form-check-input" type="checkbox" value="<?= $user['id_user'] ?>" id="group_action_<?= $user['id_user'] ?>" name="group_action[]">
                                         </div>
@@ -96,21 +96,21 @@ $roles = new Roles();
                                     <td><?= $user['nama_role'] ?></td>
                                     <td>
                                         <?php if ($user['is_active'] == 1) : ?>
-                                            <span class="badge bg-success">Aktif</span>
+                                            <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Active</div>
                                         <?php else : ?>
-                                            <span class="badge bg-danger">Non-aktif</span>
+                                            <div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Non-Active</div>
                                         <?php endif; ?>
                                     </td>
                                     <td>
                                         <?php if ($user['is_active'] == 1) : ?>
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail user" onclick="detailUser('<?= $user['id_user'] ?>')"><i class="bx bx-info-circle"></i>
+                                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail user" onclick="detailUser('<?= $user['id_user'] ?>', '<?= $user['id_role'] ?>')"><i class="bx bx-info-circle"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="non-aktifkan"><i class="bx bx-user-x"></i>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="non-aktifkan" onclick="userActivation('<?= $user['id_user'] ?>', 0)"><i class="bx bx-user-x"></i>
                                                 </button>
                                             </div>
                                         <?php else : ?>
-                                            <a href="javascript:;" class="text-primary fs-4" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="aktifkan"><i class="bx bx-rotate-left"></i></a>
+                                            <a href="javascript:;" class="text-primary fs-4" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="aktifkan" onclick="userActivation('<?= $user['id_user'] ?>', 1)"><i class="bx bx-rotate-left"></i></a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -194,12 +194,66 @@ $roles = new Roles();
             type: 'POST',
             data: {
                 id_user: id_user,
-                id_role: id_role
+                id_role: id_role,
+                action: 'detailUser'
             },
             success: function(response) {
                 $('#myModal').html(response);
                 $('#myModal').modal('show');
             }
         });
+    }
+
+    function userActivation(id_user, status) {
+
+        var ajaxActivation = (id_user, status) => {
+            $.ajax({
+                url: 'classes/User.php',
+                type: 'POST',
+                data: {
+                    id_user: id_user,
+                    status: status,
+                    action: 'userActivation',
+                },
+                success: function(response) {
+                    let result = JSON.parse(response);
+                    Lobibox.notify(`${result.status}`, {
+                        pauseDelayOnHover: true,
+                        size: 'mini',
+                        rounded: true,
+                        delayIndicator: false,
+                        delay: 2500,
+                        icon: `${result.icon}`,
+                        continueDelayOnInactiveTab: false,
+                        sound: false,
+                        position: 'center top',
+                        msg: `${result.message}`
+                    });
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2500);
+                }
+            });
+        }
+
+        if (status == 0) {
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "User yang akan dinon-aktifkan, tidak bisa login ke sistem lagi!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    ajaxActivation(id_user, status);
+                }
+            });
+        } else {
+            ajaxActivation(id_user, status);
+        }
+
     }
 </script>

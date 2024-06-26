@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['is_login'])) {
+	header('location: index.php');
+	exit;
+}
+
 date_default_timezone_set('Asia/Jakarta');
 
 require_once 'config/connection.php';
@@ -66,7 +72,7 @@ require_once 'classes/Menu.php';
 			<ul class="metismenu" id="menu">
 				<?php
 				$menu = new Menu();
-				$menus = $menu->read(1);
+				$menus = $menu->read($_SESSION['user']['id_role']);
 				?>
 				<li class="<?= !isset($_GET['page']) ? 'mm-active' : '' ?>">
 					<a href="dashboard.php">
@@ -103,7 +109,7 @@ require_once 'classes/Menu.php';
 				<?php endforeach; ?>
 				<li class="menu-label">Autentikasi</li>
 				<li>
-					<a href="javascript:;">
+					<a href="javascript:;" onclick="logout()">
 						<div class="parent-icon"><i class='bx bx-log-out-circle'></i>
 						</div>
 						<div class="menu-title">Log Out</div>
@@ -177,12 +183,12 @@ require_once 'classes/Menu.php';
 						<a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
 							<div class="user-info">
-								<p class="user-name mb-0">Dita Mahameru</p>
-								<p class="designattion mb-0">Human Resource Development (HRD)</p>
+								<p class="user-name mb-0"><?= ucwords($_SESSION['user']['nama_user']) ?></p>
+								<p class="designattion mb-0"><?= ucwords($_SESSION['user']['nama_role']) ?></p>
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i class="bx bx-log-out-circle"></i><span>Logout</span></a>
+							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;" onclick="logout()"><i class="bx bx-log-out-circle"></i><span>Logout</span></a>
 							</li>
 						</ul>
 					</div>
@@ -253,6 +259,7 @@ require_once 'classes/Menu.php';
 	<script src="assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
 	<script src="assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
 	<!--notification js -->
+	<script src="assets/plugins/notifications/js/sweetalert2@11.js"></script>
 	<script src="assets/plugins/notifications/js/lobibox.min.js"></script>
 	<script src="assets/plugins/notifications/js/notifications.min.js"></script>
 	<!--app JS-->
@@ -261,6 +268,42 @@ require_once 'classes/Menu.php';
 		$(function() {
 			$('[data-bs-toggle="tooltip"]').tooltip();
 		})
+
+		function logout() {
+			Swal.fire({
+				title: "Apakah Anda yakin?",
+				text: "Anda akan keluar dari sistem!",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Ya, Keluar!",
+				cancelButtonText: "Batal"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+						url: 'classes/Authentication.php',
+						type: 'POST',
+						data: {
+							action: 'logout'
+						},
+						success: function(response) {
+							Swal.fire({
+								title: "Berhasil!",
+								text: "Anda berhasil keluar dari sistem!",
+								icon: "success",
+								showConfirmButton: false,
+								timer: 1500
+							}).then((e) => {
+								if (e.dismiss === Swal.DismissReason.timer) {
+									window.location.href = 'index.php';
+								}
+							})
+						}
+					});
+				}
+			});
+		}
 	</script>
 </body>
 

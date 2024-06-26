@@ -25,7 +25,7 @@
         <div class="card-body">
             <?php
             echo '<pre>';
-            print_r($menus);
+            print_r($_SESSION['user']);
             echo '</pre>';
             ?>
             <center>
