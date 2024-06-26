@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 25 Jun 2024 pada 09.05
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Host: my_db
+-- Waktu pembuatan: 26 Jun 2024 pada 15.47
+-- Versi server: 11.4.2-MariaDB-ubu2404
+-- Versi PHP: 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,8 @@ CREATE TABLE `detail_admin` (
 INSERT INTO `detail_admin` (`id_admin`, `user_id`, `nama`) VALUES
 (2, 3, 'osamu dazai'),
 (3, 4, 'nakahara chuya'),
-(4, 5, 'nakajima atsushi');
+(4, 5, 'Nakajima Atsushi'),
+(5, 6, 'akutagawa ryounosuke');
 
 -- --------------------------------------------------------
 
@@ -59,8 +60,8 @@ CREATE TABLE `detail_hrd` (
 --
 
 INSERT INTO `detail_hrd` (`id_hrd`, `user_id`, `nama`) VALUES
-(1, 1, 'yukichi fukuzawa'),
-(2, 2, 'ogari mori');
+(1, 1, 'Yukichi Fukuzawa'),
+(2, 2, 'Ogari Mori');
 
 -- --------------------------------------------------------
 
@@ -73,6 +74,7 @@ CREATE TABLE `detail_karyawan` (
   `user_id` int(11) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL,
   `nik` varchar(50) DEFAULT NULL,
+  `alamat` text DEFAULT NULL,
   `jenkel` enum('Laki-laki','Perempuan') DEFAULT NULL,
   `tempat_lahir` varchar(20) DEFAULT NULL,
   `tanggal_lahir` date DEFAULT NULL,
@@ -80,6 +82,13 @@ CREATE TABLE `detail_karyawan` (
   `status_karyawan` int(11) DEFAULT NULL,
   `posisi_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `detail_karyawan`
+--
+
+INSERT INTO `detail_karyawan` (`id_karyawan`, `user_id`, `nama`, `nik`, `alamat`, `jenkel`, `tempat_lahir`, `tanggal_lahir`, `no_hp`, `status_karyawan`, `posisi_id`) VALUES
+(1, 7, 'Bram Stoker', '00340000345', 'Solo', 'Laki-laki', 'Surakarta', '2008-01-02', '789789', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -213,6 +222,7 @@ CREATE TABLE `user` (
   `email` varchar(50) DEFAULT NULL,
   `password` text DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL,
+  `photo` text DEFAULT NULL,
   `is_active` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -220,12 +230,14 @@ CREATE TABLE `user` (
 -- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `role_id`, `is_active`) VALUES
-(1, 'fukuzawa', 'fukuzawa@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 1),
-(2, 'mori', 'mori@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 1),
-(3, 'dazai', 'dazai@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 1),
-(4, 'chuya', 'chuya@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 1),
-(5, 'atsushi', 'atsushi@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 1);
+INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `role_id`, `photo`, `is_active`) VALUES
+(1, 'fukuzawa', 'fukuzawa@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 'yukichifukuzawa_1.png', 1),
+(2, 'mori', 'mori@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 'ogarimori_2.jpg', 1),
+(3, 'dazai', 'dazai@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 1),
+(4, 'chuya', 'chuya@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 1),
+(5, 'atsushi', 'atsushi@gmail.com', '250cf8b51c773f3f8dc8b4be867a9a02', 1, 'nakajimaatsushi_5.jpg', 1),
+(6, 'akutagawa', 'akutagawa@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 0),
+(7, 'bram', 'bramstoker@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1);
 
 --
 -- Indexes for dumped tables
@@ -308,7 +320,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT untuk tabel `detail_admin`
 --
 ALTER TABLE `detail_admin`
-  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `detail_hrd`
@@ -320,7 +332,7 @@ ALTER TABLE `detail_hrd`
 -- AUTO_INCREMENT untuk tabel `detail_karyawan`
 --
 ALTER TABLE `detail_karyawan`
-  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `divisi`
@@ -362,7 +374,7 @@ ALTER TABLE `submenu`
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

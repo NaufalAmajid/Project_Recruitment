@@ -148,7 +148,11 @@ require_once 'classes/Menu.php';
 										<a class="dropdown-item" href="javascript:;">
 											<div class="d-flex align-items-center">
 												<div class="user-online">
-													<img src="assets/images/avatars/avatar-1.png" class="msg-avatar" alt="user avatar">
+													<?php if (is_null($_SESSION['user']['photo'])) : ?>
+														<img src="assets/images/avatars/placeholder-image.png" class="msg-avatar" alt="user avatar">
+													<?php else : ?>
+														<img src="myfiles/photo/<?= $_SESSION['user']['photo'] ?>" class="msg-avatar" alt="user avatar">
+													<?php endif; ?>
 												</div>
 												<div class="flex-grow-1">
 													<h6 class="msg-name">Daisy Anderson<span class="msg-time float-end">5 sec
@@ -181,7 +185,11 @@ require_once 'classes/Menu.php';
 
 					<div class="user-box dropdown px-3">
 						<a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
+							<?php if (is_null($_SESSION['user']['photo'])) : ?>
+								<img src="assets/images/avatars/placeholder-image.png" class="user-img" alt="user avatar">
+							<?php else : ?>
+								<img src="myfiles/photo/<?= $_SESSION['user']['photo'] ?>" class="user-img" alt="user avatar">
+							<?php endif; ?>
 							<div class="user-info">
 								<p class="user-name mb-0"><?= ucwords($_SESSION['user']['nama_user']) ?></p>
 								<p class="designattion mb-0"><?= ucwords($_SESSION['user']['nama_role']) ?></p>

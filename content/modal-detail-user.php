@@ -88,7 +88,9 @@ $detail = $user->getAllUserAccount("where usr.id_user = $_POST[id_user]")[0];
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="updateUser('<?= $detail['id_user'] ?>', '<?= $detail['id_role'] ?>')">Simpan Perubahan</button>
+            <?php if ($_POST['id_role'] != 3) : ?>
+                <button type="button" class="btn btn-primary" onclick="updateUser('<?= $detail['id_user'] ?>', '<?= $detail['id_role'] ?>')">Simpan Perubahan</button>
+            <?php endif; ?>
         </div>
     </div>
 </div>

@@ -30,6 +30,7 @@ class Auth
                     usr.username,
                     usr.email,
                     usr.id_user,
+                    usr.photo,
                     case
                         when da.nama is not null then da.nama
                         when dh.nama is not null then dh.nama
