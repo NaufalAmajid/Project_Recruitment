@@ -92,7 +92,7 @@ $roles = new Roles();
                                     <td><?= $no++ ?></td>
                                     <td><?= $user['username'] ?></td>
                                     <td><?= $user['email'] ?></td>
-                                    <td><?= $user['nama_user'] ?></td>
+                                    <td><?= ucwords($user['nama_user']) ?></td>
                                     <td><?= $user['nama_role'] ?></td>
                                     <td>
                                         <?php if ($user['is_active'] == 1) : ?>

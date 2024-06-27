@@ -27,6 +27,8 @@ require_once 'classes/Menu.php';
 	<link href="assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
 	<link href="assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="assets/plugins/notifications/css/lobibox.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 	<!-- loader-->
 	<link href="assets/css/pace.min.css" rel="stylesheet" />
 	<script src="assets/js/pace.min.js"></script>
@@ -270,6 +272,8 @@ require_once 'classes/Menu.php';
 	<script src="assets/plugins/notifications/js/sweetalert2@11.js"></script>
 	<script src="assets/plugins/notifications/js/lobibox.min.js"></script>
 	<script src="assets/plugins/notifications/js/notifications.min.js"></script>
+	<!-- select2 -->
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	<!--app JS-->
 	<script src="assets/js/app.js"></script>
 	<script>

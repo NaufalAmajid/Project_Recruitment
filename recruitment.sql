@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: my_db
--- Waktu pembuatan: 26 Jun 2024 pada 15.47
--- Versi server: 11.4.2-MariaDB-ubu2404
--- Versi PHP: 8.2.8
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 27 Jun 2024 pada 08.52
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,7 +38,7 @@ CREATE TABLE `detail_admin` (
 --
 
 INSERT INTO `detail_admin` (`id_admin`, `user_id`, `nama`) VALUES
-(2, 3, 'osamu dazai'),
+(2, 3, 'Osamu Dazai'),
 (3, 4, 'nakahara chuya'),
 (4, 5, 'Nakajima Atsushi'),
 (5, 6, 'akutagawa ryounosuke');
@@ -88,7 +88,8 @@ CREATE TABLE `detail_karyawan` (
 --
 
 INSERT INTO `detail_karyawan` (`id_karyawan`, `user_id`, `nama`, `nik`, `alamat`, `jenkel`, `tempat_lahir`, `tanggal_lahir`, `no_hp`, `status_karyawan`, `posisi_id`) VALUES
-(1, 7, 'Bram Stoker', '00340000345', 'Solo', 'Laki-laki', 'Surakarta', '2008-01-02', '789789', NULL, NULL);
+(1, 7, 'Bram Stoker', '00340000345', 'Solo', 'Laki-laki', 'Surakarta', '2008-01-02', '789789', NULL, NULL),
+(2, 8, 'margaret mitchell', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -98,8 +99,21 @@ INSERT INTO `detail_karyawan` (`id_karyawan`, `user_id`, `nama`, `nik`, `alamat`
 
 CREATE TABLE `divisi` (
   `id_divisi` int(11) NOT NULL,
-  `nama_divisi` varchar(50) DEFAULT NULL
+  `nama_divisi` varchar(50) DEFAULT NULL,
+  `is_active` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `divisi`
+--
+
+INSERT INTO `divisi` (`id_divisi`, `nama_divisi`, `is_active`) VALUES
+(1, 'Spinning', 1),
+(2, 'Weaving', 1),
+(3, 'Finishing', 1),
+(4, 'Garment', 1),
+(5, 'Knitting', 1),
+(6, 'Supporting', 1);
 
 -- --------------------------------------------------------
 
@@ -129,6 +143,47 @@ INSERT INTO `hak_akses` (`id_hak_akses`, `role_id`, `menu_id`) VALUES
 (9, 1, 8),
 (10, 2, 8),
 (11, 3, 8);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `lamaran`
+--
+
+CREATE TABLE `lamaran` (
+  `id_lamaran` int(11) NOT NULL,
+  `loker_id` int(11) DEFAULT NULL,
+  `karyawan_id` int(11) DEFAULT NULL,
+  `file_lamaran` text DEFAULT NULL,
+  `status_lamaran` int(11) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `loker`
+--
+
+CREATE TABLE `loker` (
+  `id_loker` int(11) NOT NULL,
+  `posisi_id` int(11) DEFAULT NULL,
+  `divisi_id` int(11) DEFAULT NULL,
+  `jumlah_kebutuhan` int(11) DEFAULT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `is_active` int(11) DEFAULT 1,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `loker`
+--
+
+INSERT INTO `loker` (`id_loker`, `posisi_id`, `divisi_id`, `jumlah_kebutuhan`, `deskripsi`, `is_active`, `created_at`) VALUES
+(1, 8, 5, 3, 'Test\r\n- adad\r\n- adwqdq\r\n- msfwf', 1, '2024-06-27 10:54:40'),
+(2, 4, 2, 1, 'Loermersdf', 1, '2024-06-27 11:24:27'),
+(3, 14, 4, 5, 'LASDQDSDF', 1, '2024-06-27 11:34:16'),
+(4, 20, 3, 1, 'ASDXVXVW', 1, '2024-06-27 11:34:58');
 
 -- --------------------------------------------------------
 
@@ -166,8 +221,37 @@ INSERT INTO `menu` (`id_menu`, `nama_menu`, `direktori`, `icon`) VALUES
 CREATE TABLE `posisi` (
   `id_posisi` int(11) NOT NULL,
   `nama_posisi` varchar(50) DEFAULT NULL,
+  `is_active` int(11) DEFAULT 1,
   `divisi_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `posisi`
+--
+
+INSERT INTO `posisi` (`id_posisi`, `nama_posisi`, `is_active`, `divisi_id`) VALUES
+(1, 'Komisaris utama', 1, NULL),
+(2, 'Komisaris', 1, NULL),
+(3, 'Direktur Utama', 1, NULL),
+(4, 'Direktur Operasional', 1, NULL),
+(5, 'Direktur Keuangan', 1, NULL),
+(6, 'Trainer', 1, NULL),
+(7, 'direktur umum', 1, NULL),
+(8, 'direktur IT', 1, NULL),
+(9, 'General manager', 1, NULL),
+(10, 'manager', 1, NULL),
+(11, 'section head', 1, NULL),
+(12, 'supervisor', 1, NULL),
+(13, 'kepala shift', 1, NULL),
+(14, 'kepala regu', 1, NULL),
+(15, 'staff', 1, NULL),
+(16, 'security', 1, NULL),
+(17, 'operator', 1, NULL),
+(18, 'driver', 1, NULL),
+(19, 'perawat', 1, NULL),
+(20, 'bidan', 1, NULL),
+(21, 'dokter', 1, NULL),
+(22, 'magang', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -233,11 +317,12 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `role_id`, `photo`, `is_active`) VALUES
 (1, 'fukuzawa', 'fukuzawa@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 'yukichifukuzawa_1.png', 1),
 (2, 'mori', 'mori@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 'ogarimori_2.jpg', 1),
-(3, 'dazai', 'dazai@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 1),
+(3, 'dazai', 'dazai@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 'osamudazai_3.jpg', 1),
 (4, 'chuya', 'chuya@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 1),
 (5, 'atsushi', 'atsushi@gmail.com', '250cf8b51c773f3f8dc8b4be867a9a02', 1, 'nakajimaatsushi_5.jpg', 1),
 (6, 'akutagawa', 'akutagawa@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 0),
-(7, 'bram', 'bramstoker@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1);
+(7, 'bram', 'bramstoker@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1),
+(8, 'margaret', 'margaret@gmail.com', '202cb962ac59075b964b07152d234b70', 3, NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -278,6 +363,20 @@ ALTER TABLE `hak_akses`
   ADD PRIMARY KEY (`id_hak_akses`),
   ADD KEY `hak_akses_role_FK` (`role_id`),
   ADD KEY `hak_akses_menu_FK` (`menu_id`);
+
+--
+-- Indeks untuk tabel `lamaran`
+--
+ALTER TABLE `lamaran`
+  ADD PRIMARY KEY (`id_lamaran`);
+
+--
+-- Indeks untuk tabel `loker`
+--
+ALTER TABLE `loker`
+  ADD PRIMARY KEY (`id_loker`),
+  ADD KEY `loker_posisi_FK` (`posisi_id`),
+  ADD KEY `loker_divisi_FK` (`divisi_id`);
 
 --
 -- Indeks untuk tabel `menu`
@@ -332,19 +431,31 @@ ALTER TABLE `detail_hrd`
 -- AUTO_INCREMENT untuk tabel `detail_karyawan`
 --
 ALTER TABLE `detail_karyawan`
-  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `divisi`
 --
 ALTER TABLE `divisi`
-  MODIFY `id_divisi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_divisi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `hak_akses`
 --
 ALTER TABLE `hak_akses`
   MODIFY `id_hak_akses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT untuk tabel `lamaran`
+--
+ALTER TABLE `lamaran`
+  MODIFY `id_lamaran` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `loker`
+--
+ALTER TABLE `loker`
+  MODIFY `id_loker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `menu`
@@ -356,7 +467,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT untuk tabel `posisi`
 --
 ALTER TABLE `posisi`
-  MODIFY `id_posisi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_posisi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT untuk tabel `role`
@@ -374,7 +485,7 @@ ALTER TABLE `submenu`
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -407,10 +518,11 @@ ALTER TABLE `hak_akses`
   ADD CONSTRAINT `hak_akses_role_FK` FOREIGN KEY (`role_id`) REFERENCES `role` (`id_role`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `posisi`
+-- Ketidakleluasaan untuk tabel `loker`
 --
-ALTER TABLE `posisi`
-  ADD CONSTRAINT `posisi_divisi_FK` FOREIGN KEY (`divisi_id`) REFERENCES `divisi` (`id_divisi`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `loker`
+  ADD CONSTRAINT `loker_divisi_FK` FOREIGN KEY (`divisi_id`) REFERENCES `divisi` (`id_divisi`),
+  ADD CONSTRAINT `loker_posisi_FK` FOREIGN KEY (`posisi_id`) REFERENCES `posisi` (`id_posisi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `submenu`
