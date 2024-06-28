@@ -1,6 +1,8 @@
 <?php
+require_once '../classes/Loker.php';
 require_once '../classes/Divisi.php';
 require_once '../classes/Posisi.php';
+$detLoker = $loker->getLokerById($_POST['id_loker']);
 ?>
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -15,7 +17,7 @@ require_once '../classes/Posisi.php';
                     <select id="posisi" name="posisi" class="form-select">
                         <option value="">-- pilih posisi --</option>
                         <?php foreach ($posisi->getAllPosisi() as $pos) : ?>
-                            <option value="<?= $pos['id_posisi'] ?>"><?= ucwords($pos['nama_posisi']) ?></option>
+                            <option value="<?= $pos['id_posisi'] ?>" <?= $detLoker ? ($detLoker['posisi_id'] == $pos['id_posisi'] ? 'selected' : '') : '' ?>><?= ucwords($pos['nama_posisi']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -24,23 +26,23 @@ require_once '../classes/Posisi.php';
                     <select id="divisi" name="divisi" class="form-select">
                         <option value="">-- pilih divisi --</option>
                         <?php foreach ($divisi->getAllDivisi() as $div) : ?>
-                            <option value="<?= $div['id_divisi'] ?>"><?= ucwords($div['nama_divisi']) ?></option>
+                            <option value="<?= $div['id_divisi'] ?>" <?= $detLoker ? ($detLoker['divisi_id'] == $div['id_divisi'] ? 'selected' : '') : '' ?>><?= ucwords($div['nama_divisi']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="col-md-8">
                     <label for="deskripsi" class="form-label">Deskripsi</label>
-                    <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi ..." rows="3"></textarea>
+                    <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi ..." rows="3"><?= $detLoker ? $detLoker['deskripsi'] : '' ?></textarea>
                 </div>
                 <div class="col-md-4">
                     <label for="jumlah_kebutuhan" class="form-label">Jumlah Kebutuhan</label>
-                    <input type="number" class="form-control" id="jumlah_kebutuhan" name="jumlah_kebutuhan">
+                    <input type="number" class="form-control" id="jumlah_kebutuhan" name="jumlah_kebutuhan" value="<?= $detLoker ? $detLoker['jumlah_kebutuhan'] : '' ?>">
                 </div>
             </form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="saveLoker()">Simpan</button>
+            <button type="button" class="btn btn-primary" onclick="saveLoker('<?= $detLoker ? 'editLoker' : 'addLoker' ?>', '<?= $_POST['id_loker'] ?>')">Simpan</button>
         </div>
     </div>
 </div>
@@ -60,7 +62,7 @@ require_once '../classes/Posisi.php';
         });
     });
 
-    function saveLoker() {
+    function saveLoker(status, id_loker) {
         let form = $('#form-loker').serializeArray();
         let send = {};
         let data = [];
@@ -71,7 +73,8 @@ require_once '../classes/Posisi.php';
                 send[item.name] = item.value;
             }
         });
-        send['action'] = 'addLoker';
+        send['action'] = status;
+        send['id_loker'] = id_loker;
 
         if (data.length > 0) {
             Lobibox.notify('error', {

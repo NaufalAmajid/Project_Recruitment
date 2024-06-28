@@ -56,8 +56,8 @@ class Auth
                 join role ro on
                     usr.role_id = ro.id_role
                 where
-                    (usr.username like '%$username_email%'
-                        or usr.email like '%$username_email%')
+                    (usr.username = '$username_email'
+                        or usr.email = '$username_email')
                     and usr.password = '$password'
                     and usr.is_active = 1";
         $stmt = $this->conn->prepare($query);

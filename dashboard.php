@@ -11,6 +11,8 @@ require_once 'config/connection.php';
 require_once 'config/functions.php';
 require_once 'classes/DB.php';
 require_once 'classes/Menu.php';
+
+$func = new Functions();
 ?>
 <!doctype html>
 <html lang="en" class="color-header headercolor1">

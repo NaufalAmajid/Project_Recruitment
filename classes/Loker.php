@@ -16,6 +16,14 @@ class Loker
         return $res;
     }
 
+    public function updateLoker($table, $data, $where)
+    {
+        $db = DB::getInstance();
+        $res = $db->update($table, $data, $where);
+
+        return $res;
+    }
+
     public function getAllLoker()
     {
         $query = "select
@@ -34,12 +42,24 @@ class Loker
                         lok.posisi_id = pos.id_posisi
                     join divisi divi on
                         lok.divisi_id = divi.id_divisi
+                    where
+                        lok.is_active = 1
                     group by 
 	                    lok.id_loker";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getLokerById($id)
+    {
+        $query = "SELECT * FROM loker WHERE id_loker = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 
@@ -67,6 +87,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'status' => 'error',
                 'icon' => 'bx bx-error',
                 'message' => 'Data gagal disimpan!'
+            ]);
+        }
+    }
+
+    if ($_POST['action'] == 'editLoker') {
+        $data = [
+            'posisi_id' => $_POST['posisi'],
+            'divisi_id' => $_POST['divisi'],
+            'jumlah_kebutuhan' => $_POST['jumlah_kebutuhan'],
+            'deskripsi' => $_POST['deskripsi'],
+        ];
+        $where = ['id_loker' => $_POST['id_loker']];
+        $save = $loker->updateLoker('loker', $data, $where);
+        if ($save) {
+            echo json_encode([
+                'status' => 'success',
+                'icon' => 'bx bx-check',
+                'message' => 'Data berhasil diubah!'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'icon' => 'bx bx-error',
+                'message' => 'Data gagal diubah!'
+            ]);
+        }
+    }
+
+    if ($_POST['action'] == 'deleteLoker') {
+        $where = ['id_loker' => $_POST['id_loker']];
+        $update = $loker->updateLoker('loker', ['is_active' => 0], $where);
+        if ($update) {
+            echo json_encode([
+                'status' => 'success',
+                'icon' => 'bx bx-check',
+                'message' => 'Data berhasil dihapus!'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'icon' => 'bx bx-error',
+                'message' => 'Data gagal dihapus!'
             ]);
         }
     }

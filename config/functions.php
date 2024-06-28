@@ -112,4 +112,10 @@ class Functions
         }
         return $result;
     }
+
+    public function truncateString($string)
+    {
+        $rand = rand(20, 30);
+        return strlen($string) > $rand ? substr($string, 0, $rand) . '...' : $string;
+    }
 }
