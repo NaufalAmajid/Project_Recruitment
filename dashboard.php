@@ -54,6 +54,16 @@ $func = new Functions();
 		.active-breadcrumb {
 			color: black !important;
 		}
+
+		.input-border-bottom {
+			border: none;
+			border-bottom: 1px solid #000;
+			border-radius: 0;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			text-indent: 1px;
+			text-overflow: '';
+		}
 	</style>
 </head>
 

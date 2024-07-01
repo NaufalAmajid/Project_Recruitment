@@ -1,6 +1,7 @@
 <?php
 require_once 'classes/User.php';
 require_once 'classes/Loker.php';
+$lokers = new Loker();
 ?>
 <!--breadcrumb-->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -12,7 +13,7 @@ require_once 'classes/Loker.php';
                 </li>
                 <li class="breadcrumb-item active" aria-current="page"><a href="?page=lowongan_kerja">Lowongan Kerja Tersedia</a></li>
                 <?php if (isset($_GET['menu'])) : ?>
-                    <li class="breadcrumb-item active" aria-current="page"><a href="?page=lowongan_kerja&menu=<?= $_GET['menu'] ?>">Divisi & Posisi</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="?page=lowongan_kerja&menu=<?= $_GET['menu'] ?>"><?= strtoupper($_GET['menu']) ?></a></li>
                 <?php endif; ?>
             </ol>
         </nav>
@@ -29,7 +30,7 @@ require_once 'classes/Loker.php';
     </div>
 </div>
 <!--end breadcrumb-->
-<?php if (isset($_GET['menu'])) : ?>
+<?php if (isset($_GET['menu']) && $_GET['menu'] == 'divisi_posisi') : ?>
     <?php
     require_once 'classes/Divisi.php';
     require_once 'classes/Posisi.php';
@@ -285,6 +286,8 @@ require_once 'classes/Loker.php';
             });
         }
     </script>
+<?php elseif (isset($_GET['menu']) && $_GET['menu'] == 'soal') : ?>
+    <?php include 'content/loker/soal_loker.php'; ?>
 <?php else : ?>
     <div class="row">
         <div class="card radius-10">
@@ -299,12 +302,12 @@ require_once 'classes/Loker.php';
                                 <th>Deskripsi</th>
                                 <th>Dibutuhkan</th>
                                 <th>Terisi</th>
+                                <th>Soal Test Skill</th>
                                 <th>Status</th>
                                 <th>#</th>
                             </tr>
                         </thead>
                         <?php
-                        $lokers = new Loker();
                         $no = 1;
                         ?>
                         <tbody>
@@ -314,8 +317,9 @@ require_once 'classes/Loker.php';
                                     <td><?= ucwords($loker['nama_posisi']) ?></td>
                                     <td><?= ucwords($loker['nama_divisi']) ?></td>
                                     <td><?= $func->truncateString($loker['deskripsi']) ?></td>
-                                    <td><?= $loker['jumlah_kebutuhan'] ?></td>
-                                    <td><?= $loker['jumlah_pelamar'] ?></td>
+                                    <td align="center"><?= $loker['jumlah_kebutuhan'] ?></td>
+                                    <td align="center"><?= $loker['jumlah_pelamar'] ?></td>
+                                    <td align="center"><?= $loker['jumlah_soal'] ?></td>
                                     <td>
                                         <?php if ($loker['jumlah_kebutuhan'] == $loker['jumlah_pelamar']) : ?>
                                             <div class="badge rounded-pill text-danger bg-light-danger p-2 px-3"><i class="bx bxs-circle me-1"></i>Penuh</div>
@@ -327,6 +331,7 @@ require_once 'classes/Loker.php';
                                         <div class="d-flex order-actions">
                                             <a href="javascript:;" onclick="showFormLoker('<?= $loker['id_loker'] ?>')" class="text-primary bg-light-primary"><i class="bx bxs-edit"></i></a>
                                             <a href="javascript:;" onclick="deleteLoker('<?= $loker['id_loker'] ?>')" class="text-danger bg-light-danger ms-3"><i class="bx bxs-trash"></i></a>
+                                            <a href="?page=lowongan_kerja&menu=soal&id=<?= $loker['id_loker'] ?>" class="text-info bg-light-info ms-3"><i class="bx bxs-detail"></i></a>
                                         </div>
                                     </td>
                                 </tr>

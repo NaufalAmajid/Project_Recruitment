@@ -1,6 +1,5 @@
 <?php
-require_once 'classes/User.php';
-require_once 'classes/Loker.php';
+require_once 'classes/Test_Skill.php';
 ?>
 <!--breadcrumb-->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -33,43 +32,33 @@ require_once 'classes/Loker.php';
     <div class="card radius-10">
         <div class="card-body">
             <div class="table-responsive">
-                <table id="table-list-loker" class="table table-bordered">
+                <table id="table-list-test-skill" class="table table-bordered">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Posisi</th>
                             <th>Divisi</th>
                             <th>Deskripsi</th>
-                            <th>Dibutuhkan</th>
-                            <th>Terisi</th>
-                            <th>Status</th>
+                            <th>Jumlah Soal</th>
                             <th>#</th>
                         </tr>
                     </thead>
                     <?php
-                    $lokers = new Loker();
+                    $testSkill = new Test_Skill();
                     $no = 1;
                     ?>
                     <tbody>
-                        <?php foreach ($lokers->getAllLoker() as $loker) : ?>
+                        <?php foreach ($testSkill->getAllTestByLoker() as $test) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><?= ucwords($loker['nama_posisi']) ?></td>
-                                <td><?= ucwords($loker['nama_divisi']) ?></td>
-                                <td><?= $func->truncateString($loker['deskripsi']) ?></td>
-                                <td><?= $loker['jumlah_kebutuhan'] ?></td>
-                                <td><?= $loker['jumlah_pelamar'] ?></td>
-                                <td>
-                                    <?php if ($loker['jumlah_kebutuhan'] == $loker['jumlah_pelamar']) : ?>
-                                        <div class="badge rounded-pill text-danger bg-light-danger p-2 px-3"><i class="bx bxs-circle me-1"></i>Penuh</div>
-                                    <?php else : ?>
-                                        <div class="badge rounded-pill text-success bg-light-success p-2 px-3"><i class="bx bxs-circle me-1"></i>Masih Tersedia</div>
-                                    <?php endif; ?>
-                                </td>
+                                <td><?= ucwords($test['nama_posisi']) ?></td>
+                                <td><?= ucwords($test['nama_divisi']) ?></td>
+                                <td><?= $func->truncateString($test['deskripsi']) ?></td>
+                                <td><?= $test['jumlah_kebutuhan'] ?></td>
                                 <td>
                                     <div class="d-flex order-actions">
-                                        <a href="javascript:;" onclick="showFormLoker('<?= $loker['id_loker'] ?>')" class="text-primary bg-light-primary"><i class="bx bxs-edit"></i></a>
-                                        <a href="javascript:;" onclick="deleteLoker('<?= $loker['id_loker'] ?>')" class="text-danger bg-light-danger ms-3"><i class="bx bxs-trash"></i></a>
+                                        <a href="javascript:;" onclick="showFormLoker('<?= $test['id_loker'] ?>')" class="text-primary bg-light-primary"><i class="bx bxs-edit"></i></a>
+                                        <a href="javascript:;" onclick="deleteLoker('<?= $test['id_loker'] ?>')" class="text-danger bg-light-danger ms-3"><i class="bx bxs-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -82,13 +71,13 @@ require_once 'classes/Loker.php';
 </div>
 <script>
     $(document).ready(function() {
-        var table = $('#table-list-loker').DataTable({
+        var table = $('#table-list-test-skill').DataTable({
             lengthChange: false,
             buttons: ['copy', 'excel', 'pdf', 'print']
         });
 
         table.buttons().container()
-            .appendTo('#table-list-loker_wrapper .col-md-6:eq(0)');
+            .appendTo('#table-list-test-skill_wrapper .col-md-6:eq(0)');
     });
 
     function showFormLoker(id_loker = 0) {

@@ -33,11 +33,14 @@ class Loker
                         lok.jumlah_kebutuhan,
                         lok.is_active,
                         lok.deskripsi,
-                        count(lam.id_lamaran) as jumlah_pelamar 
+                        count(lam.id_lamaran) as jumlah_pelamar,
+                        count(so.id_soal) as jumlah_soal
                     from
                         loker lok
                     left join lamaran lam on
                         lok.id_loker = lam.loker_id
+                    left join soal so on 
+                        lok.id_loker = so.loker_id
                     join posisi pos on
                         lok.posisi_id = pos.id_posisi
                     join divisi divi on
@@ -54,7 +57,18 @@ class Loker
 
     public function getLokerById($id)
     {
-        $query = "SELECT * FROM loker WHERE id_loker = :id";
+        $query = "select
+                    pos.nama_posisi,
+                    divi.nama_divisi,
+                    lok.*
+                from
+                    loker lok
+                join posisi pos on
+                    lok.posisi_id = pos.id_posisi
+                join divisi divi on
+                    lok.divisi_id = divi.id_divisi
+                where
+                    id_loker = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
