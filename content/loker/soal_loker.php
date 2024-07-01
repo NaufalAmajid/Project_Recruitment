@@ -41,7 +41,7 @@ $lokerById = $lokers->getLokerById($_GET['id']);
                     <div class="col-12">
                         <div class="input-group mb-3">
                             <input type="hidden" name="loker_id" id="loker_id" value="<?= $lokerById['id_loker'] ?>">
-                            <input type="text" id="soal" class="form-control" placeholder="Masukkan Soal ...">
+                            <input type="text" id="soal" class="form-control" placeholder="Masukkan Soal ..." autofocus>
                             <button class="btn btn-outline-secondary" type="button" id="btn-add-soal" onclick="addSoal()">Tambah Soal</button>
                         </div>
                     </div>
