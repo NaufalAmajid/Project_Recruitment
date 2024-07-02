@@ -24,8 +24,9 @@ class Loker
         return $res;
     }
 
-    public function getAllLoker()
+    public function getAllLoker($where = null)
     {
+        $search = $where ? $where : '';
         $query = "select
                         lok.id_loker,
                         pos.nama_posisi,
@@ -47,6 +48,7 @@ class Loker
                         lok.divisi_id = divi.id_divisi
                     where
                         lok.is_active = 1
+                        $search
                     group by 
 	                    lok.id_loker";
         $stmt = $this->conn->prepare($query);

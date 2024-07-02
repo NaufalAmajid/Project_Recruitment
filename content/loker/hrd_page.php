@@ -302,7 +302,7 @@ $lokers = new Loker();
                                 <th>Deskripsi</th>
                                 <th>Dibutuhkan</th>
                                 <th>Terisi</th>
-                                <th>Soal Test Skill</th>
+                                <th>Test Dasar</th>
                                 <th>Status</th>
                                 <th>#</th>
                             </tr>

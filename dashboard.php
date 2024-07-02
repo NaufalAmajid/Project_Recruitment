@@ -148,45 +148,9 @@ $func = new Functions();
 								</div>
 							</li>
 							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown"><span class="alert-count">7</span>
-									<i class="bx bx-bell"></i>
-								</a>
 								<div class="dropdown-menu dropdown-menu-end">
-									<a href="javascript:;">
-										<div class="msg-header">
-											<p class="msg-header-title">Notifications</p>
-											<p class="msg-header-badge">8 New</p>
-										</div>
-									</a>
-									<div class="header-notifications-list ps">
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<?php if (is_null($_SESSION['user']['photo'])) : ?>
-														<img src="assets/images/avatars/placeholder-image.png" class="msg-avatar" alt="user avatar">
-													<?php else : ?>
-														<img src="myfiles/photo/<?= $_SESSION['user']['photo'] ?>" class="msg-avatar" alt="user avatar">
-													<?php endif; ?>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Daisy Anderson<span class="msg-time float-end">5 sec
-															ago</span></h6>
-													<p class="msg-info">The standard chunk of lorem</p>
-												</div>
-											</div>
-										</a>
-										<div class="ps__rail-x" style="left: 0px; bottom: 0px;">
-											<div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-										</div>
-										<div class="ps__rail-y" style="top: 0px; right: 0px;">
-											<div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
-										</div>
+									<div class="header-notifications-list">
 									</div>
-									<a href="javascript:;">
-										<div class="text-center msg-footer">
-											<button class="btn btn-primary w-100">View All Notifications</button>
-										</div>
-									</a>
 								</div>
 							</li>
 							<li class="nav-item dropdown dropdown-large">
