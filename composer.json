@@ -1,5 +1,5 @@
 {
     "require": {
-        "fakerphp/faker": "^1.23"
+        "phpmailer/phpmailer": "^6.9"
     }
 }

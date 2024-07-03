@@ -63,9 +63,9 @@ require_once 'classes/Lamaran.php'
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailUser('<?= $user['id_user'] ?>', '<?= $user['id_role'] ?>')"><i class="bx bx-file"></i>
+                                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="kirim email" onclick="userActivation('<?= $user['id_user'] ?>', 0)"><i class="bx bx-mail-send"></i>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="kirim email" onclick="sendMail('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-mail-send"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -88,127 +88,42 @@ require_once 'classes/Lamaran.php'
             .appendTo('#table-list-lamaran_wrapper .col-md-6:eq(0)');
     });
 
-    function toMenu(url) {
-        window.location.href = url;
+    function detailLamaran(id, role) {
+        window.location.href = `dashboard.php?page=detail_lamaran&id=${id}&role=${role}`;
     }
 
-    function changeStatusUser(status) {
-        var group_action = [];
-        $("input[name='group_action[]']:checked").each(function() {
-            group_action.push($(this).val());
-        });
-
-        if (group_action.length == 0) {
-            Lobibox.notify('warning', {
-                pauseDelayOnHover: true,
-                size: 'mini',
-                rounded: true,
-                delayIndicator: false,
-                delay: 2500,
-                icon: 'bx bx-error',
-                continueDelayOnInactiveTab: false,
-                sound: false,
-                position: 'center top',
-                msg: `Pilih user yang akan di${status == 1 ? 'aktifkan' : 'non-aktifkan'}!`
-            });
-            return;
-        } else {
+    function sendMail(id_lamaran) {
+        Swal.fire({
+            title: 'Kirim Email',
+            text: 'Apakah lamaran ini lolos?, Lamaran yang lolos akan mendapatkan email pemberitahuan.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c407',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Lolos',
+            cancelButtonText: 'Tidak Lolos'
+        }).then((result) => {
+            let status = result.isConfirmed ? 1 : 0;
             $.ajax({
-                url: 'classes/User.php',
+                url: 'classes/Lamaran.php',
                 type: 'POST',
                 data: {
-                    group_action: group_action,
+                    id_lamaran: id_lamaran,
                     status: status,
-                    action: 'changeStatusUser'
+                    action: 'sendMail'
                 },
                 success: function(response) {
-                    let result = JSON.parse(response);
-                    Lobibox.notify(`${result.status}`, {
-                        pauseDelayOnHover: true,
-                        size: 'mini',
-                        rounded: true,
-                        delayIndicator: false,
-                        delay: 2500,
-                        icon: `${result.icon}`,
-                        continueDelayOnInactiveTab: false,
-                        sound: false,
-                        position: 'center top',
-                        msg: `${result.message}`
-                    });
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2500);
+                    console.log(response);
+                    // var data = JSON.parse(response);
+                    // Swal.fire({
+                    //     icon: data.status,
+                    //     title: data.title,
+                    //     text: data.msg,
+                    //     showConfirmButton: false,
+                    //     timer: 1500
+                    // });
                 }
             });
-        }
-    }
-
-    function detailUser(id_user, id_role) {
-        $.ajax({
-            url: 'content/modal-detail-user.php',
-            type: 'POST',
-            data: {
-                id_user: id_user,
-                id_role: id_role,
-                action: 'detailUser'
-            },
-            success: function(response) {
-                $('#myModal').html(response);
-                $('#myModal').modal('show');
-            }
-        });
-    }
-
-    function userActivation(id_user, status) {
-
-        var ajaxActivation = (id_user, status) => {
-            $.ajax({
-                url: 'classes/User.php',
-                type: 'POST',
-                data: {
-                    id_user: id_user,
-                    status: status,
-                    action: 'userActivation',
-                },
-                success: function(response) {
-                    let result = JSON.parse(response);
-                    Lobibox.notify(`${result.status}`, {
-                        pauseDelayOnHover: true,
-                        size: 'mini',
-                        rounded: true,
-                        delayIndicator: false,
-                        delay: 2500,
-                        icon: `${result.icon}`,
-                        continueDelayOnInactiveTab: false,
-                        sound: false,
-                        position: 'center top',
-                        msg: `${result.message}`
-                    });
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2500);
-                }
-            });
-        }
-
-        if (status == 0) {
-            Swal.fire({
-                title: "Apakah Anda yakin?",
-                text: "User yang akan dinon-aktifkan, tidak bisa login ke sistem lagi!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Ya!",
-                cancelButtonText: "Batal"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    ajaxActivation(id_user, status);
-                }
-            });
-        } else {
-            ajaxActivation(id_user, status);
-        }
-
+        })
     }
 </script>

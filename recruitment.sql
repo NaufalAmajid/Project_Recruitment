@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 01 Jul 2024 pada 13.52
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Host: my_db
+-- Waktu pembuatan: 03 Jul 2024 pada 14.46
+-- Versi server: 11.4.2-MariaDB-ubu2404
+-- Versi PHP: 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -138,13 +138,13 @@ INSERT INTO `hak_akses` (`id_hak_akses`, `role_id`, `menu_id`) VALUES
 (2, 1, 6),
 (3, 1, 7),
 (4, 2, 1),
-(5, 2, 3),
 (6, 2, 4),
 (7, 3, 1),
 (8, 3, 2),
 (9, 1, 8),
 (10, 2, 8),
-(11, 3, 8);
+(11, 3, 8),
+(12, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -158,6 +158,17 @@ CREATE TABLE `jawaban` (
   `karyawan_id` int(11) DEFAULT NULL,
   `jawaban` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `jawaban`
+--
+
+INSERT INTO `jawaban` (`id_jawaban`, `soal_id`, `karyawan_id`, `jawaban`) VALUES
+(1, 4, 1, 'tidak tau'),
+(2, 5, 1, 'tidak tau'),
+(3, 6, 1, 'tidak tau'),
+(4, 7, 1, 'test'),
+(5, 8, 1, '123');
 
 -- --------------------------------------------------------
 
@@ -173,6 +184,14 @@ CREATE TABLE `lamaran` (
   `status_lamaran` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `lamaran`
+--
+
+INSERT INTO `lamaran` (`id_lamaran`, `loker_id`, `karyawan_id`, `file_lamaran`, `status_lamaran`, `created_at`) VALUES
+(1, 2, 1, 'berkas_1_2.pdf', 0, '2024-07-03 11:58:30'),
+(3, 1, 1, 'berkas_1_1.pdf', 0, '2024-07-03 12:01:36');
 
 -- --------------------------------------------------------
 
@@ -220,12 +239,12 @@ CREATE TABLE `menu` (
 INSERT INTO `menu` (`id_menu`, `nama_menu`, `direktori`, `icon`) VALUES
 (1, 'lowongan kerja', 'lowongan_kerja', 'bx bx-news'),
 (2, 'tes & orientasi', 'tes_orientasi', 'bx bx-calendar-edit'),
-(3, 'tes dasar skill', 'test_skill', 'bx bx-highlight'),
 (4, 'data karyawan', 'data_karyawan', 'bx bx-body'),
 (5, 'file lamaran', 'file_lamaran', 'bx bx-file-find'),
 (6, 'penjadwalan', 'penjadwalan', 'bx bx-calendar-edit'),
 (7, 'master', 'master', 'bx bx-layer'),
-(8, 'profile', 'profile', 'bx bx-user-circle');
+(8, 'profile', 'profile', 'bx bx-user-circle'),
+(9, 'setting', 'setting', 'bx bx-cog');
 
 -- --------------------------------------------------------
 
@@ -293,6 +312,27 @@ INSERT INTO `role` (`id_role`, `nama_role`, `simple_nama_role`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `setting`
+--
+
+CREATE TABLE `setting` (
+  `id` int(11) NOT NULL,
+  `nama_perusahaan` varchar(100) DEFAULT NULL,
+  `alamat_perusahaan` text DEFAULT NULL,
+  `email_perusahaan` varchar(100) DEFAULT NULL,
+  `pesan_email_lolos` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Dumping data untuk tabel `setting`
+--
+
+INSERT INTO `setting` (`id`, `nama_perusahaan`, `alamat_perusahaan`, `email_perusahaan`, `pesan_email_lolos`) VALUES
+(1, 'PT. ABCDEFG', 'Jakarta Selatan, RT/RW 01/03', 'zaraaari11@gmail.com', 'Kepada Yth. {nama_pelamar},\r\n\r\nTerima kasih telah melamar posisi {nama_posisi} di {nama_perusahaan}. Kami sangat senang menginformasikan bahwa Anda telah lolos seleksi berkas lamaran dan kami ingin mengundang Anda untuk mengikuti tahap selanjutnya dalam proses rekrutmen.\r\n\r\nBerikut adalah detail tahap selanjutnya:\r\n\r\nTahap: Interview dan Test Orientasi\r\nTanggal: {tanggal}\r\nWaktu: {waktu}\r\nTempat: {alamat_perusahaan}\r\n\r\nKami berharap Anda dapat hadir pada waktu yang telah ditentukan. Jika Anda memiliki pertanyaan atau membutuhkan informasi lebih lanjut, jangan ragu untuk menghubungi kami di [Nomor Telepon/Email Kontak].\r\n\r\nTerima kasih atas perhatian Anda dan kami menantikan kehadiran Anda.\r\n\r\nSalam Hormat,\r\n\r\n{nama_admin}\r\nAdmin {nama_perusahaan}');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `soal`
 --
 
@@ -307,7 +347,11 @@ CREATE TABLE `soal` (
 --
 
 INSERT INTO `soal` (`id_soal`, `loker_id`, `soal`) VALUES
-(1, 1, 'Apa itu diinikan?');
+(4, 2, 'Apa itu variable?'),
+(5, 2, 'jelaskan mengenai framework?'),
+(6, 2, 'sebutkan framework javascript?'),
+(7, 1, 'Deskripsikan diri anda?'),
+(8, 1, 'apa kekurangan dan kelebihan anda?');
 
 -- --------------------------------------------------------
 
@@ -443,6 +487,12 @@ ALTER TABLE `role`
   ADD PRIMARY KEY (`id_role`);
 
 --
+-- Indeks untuk tabel `setting`
+--
+ALTER TABLE `setting`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `soal`
 --
 ALTER TABLE `soal`
@@ -495,19 +545,19 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT untuk tabel `hak_akses`
 --
 ALTER TABLE `hak_akses`
-  MODIFY `id_hak_akses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_hak_akses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `jawaban`
 --
 ALTER TABLE `jawaban`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `lamaran`
 --
 ALTER TABLE `lamaran`
-  MODIFY `id_lamaran` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_lamaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `loker`
@@ -519,7 +569,7 @@ ALTER TABLE `loker`
 -- AUTO_INCREMENT untuk tabel `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `posisi`
@@ -534,10 +584,16 @@ ALTER TABLE `role`
   MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT untuk tabel `setting`
+--
+ALTER TABLE `setting`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT untuk tabel `soal`
 --
 ALTER TABLE `soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `submenu`
