@@ -136,7 +136,6 @@ $lokerById = $lokers->getLokerById($_GET['id']);
                 msg: 'Soal tidak boleh kosong'
             });
             return;
-            return;
         }
         $.ajax({
             url: 'classes/Test_Skill.php',

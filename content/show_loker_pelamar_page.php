@@ -2,7 +2,7 @@
 require_once '../classes/Loker.php';
 $where = "AND (lok.deskripsi LIKE '%$_POST[desc]%' AND pos.id_posisi LIKE '%$_POST[posisiId]%' AND divi.id_divisi LIKE '%$_POST[divisiId]%')";
 ?>
-<?php foreach ($loker->getAllLoker($where) as $loker) : ?>
+<?php foreach ($loker->getAllLokerPelamar($where) as $loker) : ?>
     <div class="col">
         <div class="card">
             <div class="card-header">

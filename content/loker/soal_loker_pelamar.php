@@ -2,6 +2,7 @@
 require_once 'classes/Test_Skill.php';
 $testSkill = new Test_Skill();
 $lokerById = $lokers->getLokerById($_GET['id']);
+$checkJawaban = $testSkill->getJawabanByKaryawanAndLoker(['karyawan_id' => $_SESSION['user']['id_karyawan'], 'loker_id' => $_GET['id']]);
 ?>
 <div class="row">
     <div class="col-4">
@@ -37,49 +38,98 @@ $lokerById = $lokers->getLokerById($_GET['id']);
                 <h5 class="card-title">Soal Test Skill <?= ucwords($lokerById['nama_posisi']) ?></h5>
             </div>
             <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <div class="input-group mb-3">
-                            <input type="hidden" name="loker_id" id="loker_id" value="<?= $lokerById['id_loker'] ?>">
-                            <input type="text" id="soal" class="form-control" placeholder="Masukkan Soal ..." autofocus>
-                            <button class="btn btn-outline-secondary" type="button" id="btn-add-soal" onclick="addSoal()">Tambah Soal</button>
+                <?php
+                $fileLamaran = 'myfiles/berkas/berkas_' . $_SESSION['user']['id_karyawan'] . '_' . $_GET['id'] . '.pdf';
+                ?>
+                <?php if (file_exists($fileLamaran)) : ?>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <div class="alert alert-success" role="alert">
+                                <p>Berkas Lamaran Anda sudah terupload.</p>
+                                <p>Silahkan tunggu proses seleksi berikutnya.</p>
+                                <a href="<?= $fileLamaran ?>" target="_blank" class="btn btn-sm btn-primary">Lihat Berkas Lamaran</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table class="table table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th>Soal</th>
-                                        <th>#</th>
-                                    </tr>
-                                </thead>
-                                <?php foreach ($testSkill->getAllTestByLoker($_GET['id']) as $soal) : ?>
-                                    <tr>
-                                        <td><input type="text" id="soal_<?= $soal['id_soal'] ?>" value="<?= $soal['soal'] ?>" class="input-border-bottom" size="<?= strlen($soal['soal']) ?>"></td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="javascript:;" onclick="editSoal('<?= $soal['id_soal'] ?>')" class="text-primary"><i class="bx bxs-pencil fs-5"></i></a>
-                                                <a href="javascript:;" onclick="deleteSoal('<?= $soal['id_soal'] ?>')" class="text-danger ms-2"><i class="bx bxs-trash-alt fs-5"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </table>
+                <?php else : ?>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input type="hidden" name="id_loker" id="id_loker" value="<?= $_GET['id'] ?>">
+                            <?php if ($checkJawaban['jawab'] > 0) : ?>
+                                <div class="alert alert-success" role="alert">
+                                    <p>Anda sudah menjawab soal test loker ini.
+                                        Silahkan upload Berkas Lamaran untuk melanjutkan proses seleksi.
+                                    </p>
+                                    <span class="text-danger">*Disarankan untuk upload dalam 1 file PDF</span>
+                                </div>
+                            <?php else : ?>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Soal</th>
+                                                <th>Jawab</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <form id="form-soal">
+                                                <?php $no = 1; ?>
+                                                <?php foreach ($testSkill->getAllTestByLoker($_GET['id']) as $soal) : ?>
+                                                    <tr>
+                                                        <td><?= $no++ ?></td>
+                                                        <td><?= $soal['soal'] ?></td>
+                                                        <td><input type="text" name="soal_<?= $soal['id_soal'] ?>" data-idsoal="<?= $soal['id_soal'] ?>" class="input-border-bottom" size="<?= strlen($soal['soal']) ?>"></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                <tr>
+                                                    <td colspan="3" align="center">
+                                                        <button type="button" class="btn btn-sm btn-success" onclick="saveJawaban()">Simpan</button>
+                                                        <button type="reset" class="btn btn-sm btn-danger">Reset</button>
+                                                    </td>
+                                                </tr>
+                                            </form>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
-                </div>
+                    <?php if ($checkJawaban['jawab'] > 0) : ?>
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="form-group mb-4">
+                                    <center>
+                                        <img src="assets/images/image_placeholder.jpg" onclick="triggerClick(this)" alt="image-placeholder" id="image-placeholder" class="img-thumbnail" width="300" height="300">
+                                    </center>
+                                    <center>
+                                        <label for="file_berkas" id="label-laporan">Upload Berkas Diatas</label>
+                                    </center>
+                                    <input type="file" class="form-control d-none" onchange="displayFile(this)" id="file_berkas" name="file_berkas">
+                                </div>
+                                <button class="btn btn-primary col-md-12" id="btn-upload-berkas" type="button" onclick="uploadBerkas()">Upload Berkas</button>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 <script>
-    function addSoal() {
-        let soal = $('#soal').val();
-        let loker_id = $('#loker_id').val();
-        if (soal == '') {
+    function saveJawaban() {
+        let idLoker = $('#id_loker').val();
+        let data = $('#form-soal').serializeArray();
+        let jawaban = {};
+        let empty = [];
+        data.forEach((item) => {
+            if (item.value === '') {
+                empty.push(item.name);
+            } else {
+                jawaban[item.name] = item.value;
+            }
+        });
+        if (empty.length > 0) {
             Lobibox.notify('error', {
                 size: 'mini',
                 rounded: true,
@@ -88,110 +138,101 @@ $lokerById = $lokers->getLokerById($_GET['id']);
                 delayIndicator: true,
                 position: 'top right',
                 icon: 'bx bx-error',
-                msg: 'Soal tidak boleh kosong'
+                msg: 'Masih ada jawaban yang kosong'
             });
             return;
-            return;
-        }
-        $.ajax({
-            url: 'classes/Test_Skill.php',
-            type: 'POST',
-            data: {
-                action: 'addSoal',
-                soal: soal,
-                loker_id: loker_id
-            },
-            success: function(response) {
-                let res = JSON.parse(response);
-                Lobibox.notify(`${res.status}`, {
-                    size: 'mini',
-                    rounded: true,
-                    sound: false,
-                    delay: 2000,
-                    delayIndicator: true,
-                    position: 'top right',
-                    icon: `${res.icon}`,
-                    msg: `${res.msg}`
-                });
-                if (res.status == 'success') {
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+        } else {
+            $.ajax({
+                url: 'classes/Test_Skill.php',
+                type: 'post',
+                data: {
+                    action: 'saveJawaban',
+                    id_loker: idLoker,
+                    jawaban: jawaban
+                },
+                success: function(response) {
+                    let res = JSON.parse(response);
+                    Swal.fire({
+                        icon: `${res.status}`,
+                        title: `${res.title}`,
+                        html: `${res.msg}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((e) => {
+                        if (e.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    })
                 }
-            }
-        });
-    }
-
-    function editSoal(id_soal) {
-        let soal = $(`#soal_${id_soal}`).val();
-        if (soal == '') {
-            Lobibox.notify('error', {
-                size: 'mini',
-                rounded: true,
-                sound: false,
-                delay: 2000,
-                delayIndicator: true,
-                position: 'top right',
-                icon: 'bx bx-error',
-                msg: 'Soal tidak boleh kosong'
             });
-            return;
-            return;
         }
-        $.ajax({
-            url: 'classes/Test_Skill.php',
-            type: 'POST',
-            data: {
-                action: 'editSoal',
-                soal: soal,
-                id_soal: id_soal
-            },
-            success: function(response) {
-                let res = JSON.parse(response);
-                Lobibox.notify(`${res.status}`, {
-                    size: 'mini',
-                    rounded: true,
-                    sound: false,
-                    delay: 2000,
-                    delayIndicator: true,
-                    position: 'top right',
-                    icon: `${res.icon}`,
-                    msg: `${res.msg}`
-                });
-                if (res.status == 'success') {
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
-                }
-            }
-        });
     }
 
-    function deleteSoal(id_soal) {
+    function triggerClick(e) {
+        document.querySelector('#file_berkas').click();
+    }
+
+    function displayFile(e) {
+        //just file .pdf or .docx or .doc allowed
+        if (e.files[0].type == 'application/pdf' || e.files[0].type == 'application/msword' || e.files[0].type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+            if (e.files[0].size > 10000000) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Ukuran file maksimal 10MB',
+                    timer: 2000
+                }).then((e) => {
+                    document.querySelector('#file_berkas').value = '';
+                    document.querySelector('#image-placeholder').src = 'assets/images/image_placeholder.jpg';
+                });
+            } else {
+                //if file .pdf display pdf icon else display word icon
+                if (e.files[0].type == 'application/pdf') {
+                    document.querySelector('#image-placeholder').src = 'assets/images/pdf-icon.png';
+                    document.querySelector('#label-laporan').innerHTML = e.files[0].name;
+                } else {
+                    document.querySelector('#image-placeholder').src = 'assets/images/word-icon.png';
+                    document.querySelector('#label-laporan').innerHTML = e.files[0].name;
+                }
+            }
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'File yang diupload harus berformat .pdf, .docx, atau .doc',
+            }).then((e) => {
+                document.querySelector('#file_berkas').value = '';
+                document.querySelector('#image-placeholder').src = 'assets/images/image_placeholder.jpg';
+            });
+        }
+    }
+
+    function uploadBerkas() {
+        let file = document.querySelector('#file_berkas').files[0];
+        let idLoker = $('#id_loker').val();
+        let formData = new FormData();
+        formData.append('file_berkas', file);
+        formData.append('loker_id', idLoker);
+        formData.append('action', 'uploadBerkas');
         $.ajax({
             url: 'classes/Test_Skill.php',
-            type: 'POST',
-            data: {
-                action: 'deleteSoal',
-                id_soal: id_soal
-            },
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
             success: function(response) {
                 let res = JSON.parse(response);
-                Lobibox.notify(`${res.status}`, {
-                    size: 'mini',
-                    rounded: true,
-                    sound: false,
-                    delay: 2000,
-                    delayIndicator: true,
-                    position: 'top right',
-                    icon: `${res.icon}`,
-                    msg: `${res.msg}`
-                });
-                if (res.status == 'success') {
-                    setTimeout(() => {
+                Swal.fire({
+                    icon: `${res.status}`,
+                    title: `${res.title}`,
+                    text: `${res.msg}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then((e) => {
+                    if (e.dismiss === Swal.DismissReason.timer) {
                         location.reload();
-                    }, 2000);
-                }
+                    }
+                });
             }
         });
     }

@@ -57,6 +57,36 @@ class Loker
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllLokerPelamar($where = null)
+    {
+        $search = $where ? $where : '';
+        $query = "select
+                        lok.id_loker,
+                        pos.nama_posisi,
+                        divi.nama_divisi,
+                        lok.jumlah_kebutuhan,
+                        lok.is_active,
+                        lok.deskripsi,
+                        count(lam.id_lamaran) as jumlah_pelamar
+                    from
+                        loker lok
+                    left join lamaran lam on
+                        lok.id_loker = lam.loker_id
+                    join posisi pos on
+                        lok.posisi_id = pos.id_posisi
+                    join divisi divi on
+                        lok.divisi_id = divi.id_divisi
+                    where
+                        lok.is_active = 1
+                        $search
+                    group by 
+	                    lok.id_loker";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getLokerById($id)
     {
         $query = "select
