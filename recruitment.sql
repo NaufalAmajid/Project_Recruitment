@@ -321,7 +321,7 @@ CREATE TABLE `setting` (
   `alamat_perusahaan` text DEFAULT NULL,
   `email_perusahaan` varchar(100) DEFAULT NULL,
   `pesan_email_lolos` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `setting`

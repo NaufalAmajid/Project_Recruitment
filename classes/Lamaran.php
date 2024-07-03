@@ -38,6 +38,39 @@ class Lamaran
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getLamaranById($id)
+    {
+        $query = "select
+                        id_lamaran,
+                        usr.email,
+                        dk.nama,
+                        pos.nama_posisi,
+                        divi.nama_divisi,
+                        lok.id_loker,
+                        lam.file_lamaran,
+                        lam.status_lamaran,
+                        date_format(lam.created_at, '%Y-%m-%d') as hari
+                    from
+                        lamaran lam
+                    join loker lok on
+                        lam.loker_id = lok.id_loker
+                    join posisi pos on
+                        lok.posisi_id = pos.id_posisi
+                    join divisi divi on
+                        lok.divisi_id = divi.id_divisi
+                    join detail_karyawan dk on
+                        lam.karyawan_id = dk.id_karyawan
+                    join user usr on
+                        dk.user_id = usr.id_user
+                    where
+                        id_lamaran = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getSetting()
     {
         $query = "SELECT * FROM setting";
@@ -60,6 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['action'] == 'sendMail') {
         if ($_POST['status'] == 1) {
             $mail = new PHPMailer(true);
+            $detailLamaran = $lamaran->getLamaranById($_POST['id_lamaran']);
+            $setting = $lamaran->getSetting();
             try {
                 // Config SMTP
                 $mail->isSMTP();
@@ -72,14 +107,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 // To
                 $mail->setFrom('naoefal.arters0@gmail.com', 'Nanzy');
-                $mail->addAddress('naufalamajid@gmail.com', 'Naufal');
+                $mail->addAddress($detailLamaran['email'], $detailLamaran['nama']);
 
                 // Content
                 $otp = rand(100000, 999999); // Generate 6-digit OTP
                 $mail->isHTML(true);
-                $mail->Subject = 'Your OTP Code';
-                $mail->Body    = 'Your OTP code is: <b>' . $otp . '</b>';
-                $mail->AltBody = 'Your OTP code is: ' . $otp;
+                $mail->Subject = 'Lamaran Diterima';
+                $mail->Body    = $setting['pesan_email_lolos'];
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
                 $mail->send();
                 echo 'Message has been sent';
