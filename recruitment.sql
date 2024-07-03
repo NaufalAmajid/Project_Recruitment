@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: my_db
--- Waktu pembuatan: 03 Jul 2024 pada 14.46
--- Versi server: 11.4.2-MariaDB-ubu2404
--- Versi PHP: 8.2.8
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 03 Jul 2024 pada 17.48
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,7 +31,7 @@ CREATE TABLE `detail_admin` (
   `id_admin` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `detail_admin`
@@ -53,7 +53,7 @@ CREATE TABLE `detail_hrd` (
   `id_hrd` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `detail_hrd`
@@ -81,7 +81,7 @@ CREATE TABLE `detail_karyawan` (
   `no_hp` varchar(15) DEFAULT NULL,
   `status_karyawan` int(11) DEFAULT NULL,
   `posisi_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `detail_karyawan`
@@ -101,7 +101,7 @@ CREATE TABLE `divisi` (
   `id_divisi` int(11) NOT NULL,
   `nama_divisi` varchar(50) DEFAULT NULL,
   `is_active` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `divisi`
@@ -127,7 +127,7 @@ CREATE TABLE `hak_akses` (
   `id_hak_akses` int(11) NOT NULL,
   `role_id` int(11) DEFAULT NULL,
   `menu_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `hak_akses`
@@ -157,7 +157,7 @@ CREATE TABLE `jawaban` (
   `soal_id` int(11) DEFAULT NULL,
   `karyawan_id` int(11) DEFAULT NULL,
   `jawaban` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `jawaban`
@@ -183,7 +183,7 @@ CREATE TABLE `lamaran` (
   `file_lamaran` text DEFAULT NULL,
   `status_lamaran` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `lamaran`
@@ -207,7 +207,7 @@ CREATE TABLE `loker` (
   `deskripsi` text DEFAULT NULL,
   `is_active` int(11) DEFAULT 1,
   `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `loker`
@@ -230,7 +230,7 @@ CREATE TABLE `menu` (
   `nama_menu` varchar(20) DEFAULT NULL,
   `direktori` varchar(20) DEFAULT NULL,
   `icon` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `menu`
@@ -257,7 +257,7 @@ CREATE TABLE `posisi` (
   `nama_posisi` varchar(50) DEFAULT NULL,
   `is_active` int(11) DEFAULT 1,
   `divisi_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `posisi`
@@ -298,7 +298,7 @@ CREATE TABLE `role` (
   `id_role` int(11) NOT NULL,
   `nama_role` varchar(50) DEFAULT NULL,
   `simple_nama_role` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `role`
@@ -320,15 +320,16 @@ CREATE TABLE `setting` (
   `nama_perusahaan` varchar(100) DEFAULT NULL,
   `alamat_perusahaan` text DEFAULT NULL,
   `email_perusahaan` varchar(100) DEFAULT NULL,
+  `password_smtp` varchar(100) DEFAULT NULL,
   `pesan_email_lolos` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `setting`
 --
 
-INSERT INTO `setting` (`id`, `nama_perusahaan`, `alamat_perusahaan`, `email_perusahaan`, `pesan_email_lolos`) VALUES
-(1, 'PT. ABCDEFG', 'Jakarta Selatan, RT/RW 01/03', 'zaraaari11@gmail.com', 'Kepada Yth. {nama_pelamar},\r\n\r\nTerima kasih telah melamar posisi {nama_posisi} di {nama_perusahaan}. Kami sangat senang menginformasikan bahwa Anda telah lolos seleksi berkas lamaran dan kami ingin mengundang Anda untuk mengikuti tahap selanjutnya dalam proses rekrutmen.\r\n\r\nBerikut adalah detail tahap selanjutnya:\r\n\r\nTahap: Interview dan Test Orientasi\r\nTanggal: {tanggal}\r\nWaktu: {waktu}\r\nTempat: {alamat_perusahaan}\r\n\r\nKami berharap Anda dapat hadir pada waktu yang telah ditentukan. Jika Anda memiliki pertanyaan atau membutuhkan informasi lebih lanjut, jangan ragu untuk menghubungi kami di [Nomor Telepon/Email Kontak].\r\n\r\nTerima kasih atas perhatian Anda dan kami menantikan kehadiran Anda.\r\n\r\nSalam Hormat,\r\n\r\n{nama_admin}\r\nAdmin {nama_perusahaan}');
+INSERT INTO `setting` (`id`, `nama_perusahaan`, `alamat_perusahaan`, `email_perusahaan`, `password_smtp`, `pesan_email_lolos`) VALUES
+(1, 'PT. ABCDEFG', 'Jakarta Selatan, RT/RW 01/03', 'zaraaari11@gmail.com', 'ejdommtzniabltqw', 'Kepada Yth. {nama_pelamar},\r\n\r\nTerima kasih telah melamar posisi {nama_posisi} di {nama_perusahaan}. Kami sangat senang menginformasikan bahwa Anda telah lolos seleksi berkas lamaran dan kami ingin mengundang Anda untuk mengikuti tahap selanjutnya dalam proses rekrutmen.\r\n\r\nBerikut adalah detail tahap selanjutnya:\r\n\r\nTahap: Interview dan Test Orientasi\r\nTanggal: {tanggal}\r\nWaktu: {waktu}\r\nTempat: {alamat_perusahaan}\r\n\r\nKami berharap Anda dapat hadir pada waktu yang telah ditentukan. Jika Anda memiliki pertanyaan atau membutuhkan informasi lebih lanjut, jangan ragu untuk menghubungi kami di {email_perusahaan}.\r\n\r\nTerima kasih atas perhatian Anda dan kami menantikan kehadiran Anda.\r\n\r\nSalam Hormat,\r\n\r\n{nama_admin}\r\nAdmin {nama_perusahaan}');
 
 -- --------------------------------------------------------
 
@@ -340,7 +341,7 @@ CREATE TABLE `soal` (
   `id_soal` int(11) NOT NULL,
   `loker_id` int(11) DEFAULT NULL,
   `soal` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `soal`
@@ -364,7 +365,7 @@ CREATE TABLE `submenu` (
   `nama_submenu` varchar(20) DEFAULT NULL,
   `direktori` varchar(20) DEFAULT NULL,
   `menu_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `submenu`
@@ -387,7 +388,7 @@ CREATE TABLE `user` (
   `role_id` int(11) DEFAULT NULL,
   `photo` text DEFAULT NULL,
   `is_active` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `user`
@@ -400,7 +401,7 @@ INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `role_id`, `phot
 (4, 'chuya', 'chuya@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 1),
 (5, 'atsushi', 'atsushi@gmail.com', '250cf8b51c773f3f8dc8b4be867a9a02', 1, 'nakajimaatsushi_5.jpg', 1),
 (6, 'akutagawa', 'akutagawa@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 0),
-(7, 'bram', 'bramstoker@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1),
+(7, 'bram', 'hafizhahsalma1@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1),
 (8, 'margaret', 'margaret@gmail.com', '202cb962ac59075b964b07152d234b70', 3, NULL, 1);
 
 --

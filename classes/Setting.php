@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'nama_perusahaan' => $_POST['nama_perusahaan'],
             'alamat_perusahaan' => $_POST['alamat_perusahaan'],
             'email_perusahaan' => $_POST['email_perusahaan'],
+            'password_smtp' => $_POST['password_smtp'],
             'pesan_email_lolos' => $_POST['pesan_email_lolos']
         ];
         $where = [

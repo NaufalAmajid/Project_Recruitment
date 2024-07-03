@@ -50,6 +50,14 @@ $setting = $setting->getSetting();
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-2">
+                                    <h6 class="mb-0">Password SMTP</h6>
+                                </div>
+                                <div class="col-sm-10 text-secondary">
+                                    <input type="text" class="form-control" id="password_smtp" name="password_smtp" value="<?= $setting['password_smtp'] ?>">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-2">
                                     <h6 class="mb-0">Pesan Email</h6>
                                 </div>
                                 <div class="col-sm-10 text-secondary">
