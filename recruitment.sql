@@ -31,7 +31,7 @@ CREATE TABLE `detail_admin` (
   `id_admin` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `detail_admin`
@@ -53,7 +53,7 @@ CREATE TABLE `detail_hrd` (
   `id_hrd` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `detail_hrd`
@@ -81,7 +81,7 @@ CREATE TABLE `detail_karyawan` (
   `no_hp` varchar(15) DEFAULT NULL,
   `status_karyawan` int(11) DEFAULT NULL,
   `posisi_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `detail_karyawan`
@@ -101,7 +101,7 @@ CREATE TABLE `divisi` (
   `id_divisi` int(11) NOT NULL,
   `nama_divisi` varchar(50) DEFAULT NULL,
   `is_active` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `divisi`
@@ -127,7 +127,7 @@ CREATE TABLE `hak_akses` (
   `id_hak_akses` int(11) NOT NULL,
   `role_id` int(11) DEFAULT NULL,
   `menu_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `hak_akses`
@@ -157,7 +157,7 @@ CREATE TABLE `jawaban` (
   `soal_id` int(11) DEFAULT NULL,
   `karyawan_id` int(11) DEFAULT NULL,
   `jawaban` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `jawaban`
@@ -183,7 +183,7 @@ CREATE TABLE `lamaran` (
   `file_lamaran` text DEFAULT NULL,
   `status_lamaran` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `lamaran`
@@ -207,7 +207,7 @@ CREATE TABLE `loker` (
   `deskripsi` text DEFAULT NULL,
   `is_active` int(11) DEFAULT 1,
   `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `loker`
@@ -230,7 +230,7 @@ CREATE TABLE `menu` (
   `nama_menu` varchar(20) DEFAULT NULL,
   `direktori` varchar(20) DEFAULT NULL,
   `icon` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `menu`
@@ -257,7 +257,7 @@ CREATE TABLE `posisi` (
   `nama_posisi` varchar(50) DEFAULT NULL,
   `is_active` int(11) DEFAULT 1,
   `divisi_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `posisi`
@@ -298,7 +298,7 @@ CREATE TABLE `role` (
   `id_role` int(11) NOT NULL,
   `nama_role` varchar(50) DEFAULT NULL,
   `simple_nama_role` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `role`
@@ -340,7 +340,7 @@ CREATE TABLE `soal` (
   `id_soal` int(11) NOT NULL,
   `loker_id` int(11) DEFAULT NULL,
   `soal` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `soal`
@@ -364,7 +364,7 @@ CREATE TABLE `submenu` (
   `nama_submenu` varchar(20) DEFAULT NULL,
   `direktori` varchar(20) DEFAULT NULL,
   `menu_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `submenu`
@@ -387,7 +387,7 @@ CREATE TABLE `user` (
   `role_id` int(11) DEFAULT NULL,
   `photo` text DEFAULT NULL,
   `is_active` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `user`
