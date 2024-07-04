@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 03 Jul 2024 pada 17.48
+-- Waktu pembuatan: 04 Jul 2024 pada 15.48
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -135,7 +135,6 @@ CREATE TABLE `hak_akses` (
 
 INSERT INTO `hak_akses` (`id_hak_akses`, `role_id`, `menu_id`) VALUES
 (1, 1, 5),
-(2, 1, 6),
 (3, 1, 7),
 (4, 2, 1),
 (6, 2, 4),
@@ -182,16 +181,17 @@ CREATE TABLE `lamaran` (
   `karyawan_id` int(11) DEFAULT NULL,
   `file_lamaran` text DEFAULT NULL,
   `status_lamaran` int(11) DEFAULT 0,
-  `created_at` datetime DEFAULT current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `tgl_interview` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `lamaran`
 --
 
-INSERT INTO `lamaran` (`id_lamaran`, `loker_id`, `karyawan_id`, `file_lamaran`, `status_lamaran`, `created_at`) VALUES
-(1, 2, 1, 'berkas_1_2.pdf', 0, '2024-07-03 11:58:30'),
-(3, 1, 1, 'berkas_1_1.pdf', 0, '2024-07-03 12:01:36');
+INSERT INTO `lamaran` (`id_lamaran`, `loker_id`, `karyawan_id`, `file_lamaran`, `status_lamaran`, `created_at`, `tgl_interview`) VALUES
+(1, 2, 1, 'berkas_1_2.pdf', 0, '2024-07-03 11:58:30', '2024-07-11 09:00:00'),
+(3, 1, 1, 'berkas_1_1.pdf', 0, '2024-07-03 12:01:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -215,7 +215,7 @@ CREATE TABLE `loker` (
 
 INSERT INTO `loker` (`id_loker`, `posisi_id`, `divisi_id`, `jumlah_kebutuhan`, `deskripsi`, `is_active`, `created_at`) VALUES
 (1, 8, 5, 2, 'Test\r\n- adad\r\n- adwqdq\r\n- msfwf', 1, '2024-06-27 10:54:40'),
-(2, 4, 6, 3, '-Pendidikan minimal S1 di bidang Marketing, Bisnis, atau setara\r\n\r\n-Pengalaman kerja minimal 2 tahun di bidang pemasaran\r\n\r\n-Memiliki kemampuan analitis dan komunikasi yang baik\r\n\r\n-Menguasai penggunaan alat-alat pemasaran digital\r\n\r\n-Kreatif, inovatif, dan mampu bekerja di bawah tekanan', 1, '2024-06-27 11:24:27'),
+(2, 4, 6, 4, '-Pendidikan minimal S1 di bidang Marketing, Bisnis, atau setara\r\n\r\n-Pengalaman kerja minimal 2 tahun di bidang pemasaran\r\n\r\n-Memiliki kemampuan analitis dan komunikasi yang baik\r\n\r\n-Menguasai penggunaan alat-alat pemasaran digital\r\n\r\n-Kreatif, inovatif, dan mampu bekerja di bawah tekanan', 1, '2024-06-27 11:24:27'),
 (3, 14, 4, 5, 'LASDQDSDF', 0, '2024-06-27 11:34:16'),
 (4, 20, 3, 1, 'ASDXVXVW', 0, '2024-06-27 11:34:58');
 
@@ -241,7 +241,6 @@ INSERT INTO `menu` (`id_menu`, `nama_menu`, `direktori`, `icon`) VALUES
 (2, 'tes & orientasi', 'tes_orientasi', 'bx bx-calendar-edit'),
 (4, 'data karyawan', 'data_karyawan', 'bx bx-body'),
 (5, 'file lamaran', 'file_lamaran', 'bx bx-file-find'),
-(6, 'penjadwalan', 'penjadwalan', 'bx bx-calendar-edit'),
 (7, 'master', 'master', 'bx bx-layer'),
 (8, 'profile', 'profile', 'bx bx-user-circle'),
 (9, 'setting', 'setting', 'bx bx-cog');
@@ -401,7 +400,7 @@ INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `role_id`, `phot
 (4, 'chuya', 'chuya@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 1),
 (5, 'atsushi', 'atsushi@gmail.com', '250cf8b51c773f3f8dc8b4be867a9a02', 1, 'nakajimaatsushi_5.jpg', 1),
 (6, 'akutagawa', 'akutagawa@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 0),
-(7, 'bram', 'hafizhahsalma1@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1),
+(7, 'bram', 'naufalamajid@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1),
 (8, 'margaret', 'margaret@gmail.com', '202cb962ac59075b964b07152d234b70', 3, NULL, 1);
 
 --

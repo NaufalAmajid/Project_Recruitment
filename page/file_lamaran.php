@@ -9,74 +9,88 @@ require_once 'classes/Lamaran.php'
             <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="dashboard.php"><i class="bx bx-home-alt"></i></a>
                 </li>
-                <li class="breadcrumb-item" aria-current="page">Daftar Lamaran Masuk</li>
+                <li class="breadcrumb-item" aria-current="page"><a href="?page=file_lamaran">Daftar Lamaran Masuk</a></li>
+                <?php if (isset($_GET['menu'])) : ?>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="?page=file_lamaran&menu=detail_lamaran&id=<?= $_GET['id'] ?>">Detail Lamaran</a></li>
+                <?php endif; ?>
             </ol>
         </nav>
     </div>
 </div>
 <!--end breadcrumb-->
-<div class="row">
-    <div class="card radius-10">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <div>
-                    <h6 class="mb-0">List Lamaran Masuk</h6>
+<?php if (isset($_GET['menu'])) : ?>
+    <?php include 'content/show-detail-lamaran.php'; ?>
+<?php else : ?>
+    <div class="row">
+        <div class="card radius-10">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h6 class="mb-0">List Lamaran Masuk</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="table-list-lamaran" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Email</th>
+                                <th>Nama</th>
+                                <th>Posisi</th>
+                                <th>Divisi</th>
+                                <th>Status</th>
+                                <th>File Berkas</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <?php
+                        $lamarans = new Lamaran();
+                        $no = 1;
+                        ?>
+                        <tbody>
+                            <?php foreach ($lamarans->getAllLamaran() as $lamar) : ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td><?= $lamar['email'] ?></td>
+                                    <td><?= ucwords($lamar['nama']) ?></td>
+                                    <td><?= ucwords($lamar['nama_posisi']) ?></td>
+                                    <td><?= ucwords($lamar['nama_divisi']) ?></td>
+                                    <td>
+                                        <?php if ($lamar['status_lamaran'] == 0) : ?>
+                                            <div class="badge rounded-pill text-primary bg-light-primary p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Proses</div>
+                                        <?php elseif ($lamar['status_lamaran'] == 2) : ?>
+                                            <div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Tidak Lolos</div>
+                                        <?php else : ?>
+                                            <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Lolos</div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <a href="myfiles/berkas/<?= $lamar['file_lamaran'] ?>" target="_blank" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-from-left"></i> Lihat</a>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <?php if ($lamar['status_lamaran'] == 2 || $lamar['status_lamaran'] == 1) : ?>
+                                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
+                                                </button>
+                                            <?php else : ?>
+                                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="kirim email" onclick="sendMail('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-mail-send"></i>
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="table-list-lamaran" class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Email</th>
-                            <th>Nama</th>
-                            <th>Posisi</th>
-                            <th>Divisi</th>
-                            <th>Status</th>
-                            <th>File Berkas</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <?php
-                    $lamarans = new Lamaran();
-                    $no = 1;
-                    ?>
-                    <tbody>
-                        <?php foreach ($lamarans->getAllLamaran() as $lamar) : ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= $lamar['email'] ?></td>
-                                <td><?= ucwords($lamar['nama']) ?></td>
-                                <td><?= ucwords($lamar['nama_posisi']) ?></td>
-                                <td><?= ucwords($lamar['nama_divisi']) ?></td>
-                                <td>
-                                    <?php if ($lamar['status_lamaran'] == 0) : ?>
-                                        <div class="badge rounded-pill text-primary bg-light-primary p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Proses</div>
-                                    <?php else : ?>
-                                        <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Lolos</div>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <a href="myfiles/berkas/<?= $lamar['file_lamaran'] ?>" target="_blank" class="btn btn-outline-secondary btn-sm"><i class="bx bx-arrow-from-left"></i> Lihat</a>
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="kirim email" onclick="sendMail('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-mail-send"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
-</div>
+<?php endif; ?>
 <script>
     $(document).ready(function() {
         var table = $('#table-list-lamaran').DataTable({
@@ -88,8 +102,8 @@ require_once 'classes/Lamaran.php'
             .appendTo('#table-list-lamaran_wrapper .col-md-6:eq(0)');
     });
 
-    function detailLamaran(id, role) {
-        window.location.href = `dashboard.php?page=detail_lamaran&id=${id}&role=${role}`;
+    function detailLamaran(id) {
+        window.location.href = `dashboard.php?page=file_lamaran&menu=detail_lamaran&id=${id}`;
     }
 
     function sendMail(id_lamaran) {
@@ -112,16 +126,30 @@ require_once 'classes/Lamaran.php'
                     status: status,
                     action: 'sendMail'
                 },
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Loading...',
+                        html: 'Mohon tunggu sebentar',
+                        didOpen: () => {
+                            Swal.showLoading()
+                        },
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
                 success: function(response) {
-                    console.log(response);
-                    // var data = JSON.parse(response);
-                    // Swal.fire({
-                    //     icon: data.status,
-                    //     title: data.title,
-                    //     text: data.msg,
-                    //     showConfirmButton: false,
-                    //     timer: 1500
-                    // });
+                    var data = JSON.parse(response);
+                    Swal.fire({
+                        icon: data.status,
+                        title: data.title,
+                        text: data.msg,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((e) => {
+                        if (e.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    });
                 }
             });
         })

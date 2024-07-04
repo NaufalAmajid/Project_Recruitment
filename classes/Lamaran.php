@@ -8,48 +8,30 @@ class Lamaran
         $this->conn = DB::getInstance()->connection();
     }
 
-    public function getAllLamaran()
+    public function updateLamaran($table, $data, $where)
     {
-        $query = "select
-                        id_lamaran,
-                        usr.email,
-                        dk.nama,
-                        pos.nama_posisi,
-                        divi.nama_divisi,
-                        lok.id_loker,
-                        lam.file_lamaran,
-                        lam.status_lamaran,
-                        date_format(lam.created_at, '%Y-%m-%d') as hari
-                    from
-                        lamaran lam
-                    join loker lok on
-                        lam.loker_id = lok.id_loker
-                    join posisi pos on
-                        lok.posisi_id = pos.id_posisi
-                    join divisi divi on
-                        lok.divisi_id = divi.id_divisi
-                    join detail_karyawan dk on
-                        lam.karyawan_id = dk.id_karyawan
-                    join user usr on
-                        dk.user_id = usr.id_user";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
+        $db = DB::getInstance();
+        $res = $db->update($table, $data, $where);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
     }
 
-    public function getLamaranById($id)
+    public function getAllLamaran($where = null)
     {
+        $where = $where ? $where : '';
         $query = "select
                         id_lamaran,
                         usr.email,
+                        usr.username,
                         dk.nama,
                         pos.nama_posisi,
                         divi.nama_divisi,
                         lok.id_loker,
                         lam.file_lamaran,
                         lam.status_lamaran,
-                        date_format(lam.created_at, '%Y-%m-%d') as hari
+                        date_format(lam.created_at, '%Y-%m-%d') as hari,
+                        date_format(lam.tgl_interview, '%Y-%m-%d') as tgl_interview,
+                        date_format(lam.tgl_interview, '%H:%i') as jam
                     from
                         lamaran lam
                     join loker lok on
@@ -62,13 +44,62 @@ class Lamaran
                         lam.karyawan_id = dk.id_karyawan
                     join user usr on
                         dk.user_id = usr.id_user
-                    where
-                        id_lamaran = :id";
+                        $where";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getLamaranById($id)
+    {
+        $query = "select
+                    usr.username,
+                    usr.email,
+                    usr.photo,
+                    lam.*,
+                    dk.*,
+                    lok.*,
+                    pos.nama_posisi,
+                    divi.nama_divisi,
+                    date_format(lam.created_at, '%Y-%m-%d') as hari
+                from
+                    lamaran lam
+                join loker lok on
+                    lam.loker_id = lok.id_loker
+                join detail_karyawan dk on
+                    lam.karyawan_id = dk.id_karyawan
+                join user usr on
+                    dk.user_id = usr.id_user
+                join posisi pos on
+                    lok.posisi_id = pos.id_posisi
+                join divisi divi on
+                    lok.divisi_id = divi.id_divisi
+                where 
+                    lam.id_lamaran = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllSoalByLokerAndPelamar($where)
+    {
+        $query = "select
+                    *
+                from
+                    soal so
+                    join jawaban jaw on so.id_soal = jaw.soal_id
+                where
+                    so.loker_id = :loker_id
+                    and karyawan_id = :karyawan_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':loker_id', $where['loker_id']);
+        $stmt->bindParam(':karyawan_id', $where['karyawan_id']);
+        $stmt->execute($where);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getSetting()
@@ -104,12 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $alamat_perusahaan = $setting['alamat_perusahaan'];
             $email_perusahaan = $setting['email_perusahaan'];
             $nama_admin = ucwords($_SESSION['user']['nama_user']);
-            //replace variable in pesan_email_lolos {nama_pelamar}, {nama_posisi}, {nama_perusahaan}, {tanggal}, {waktu}, {alamat_perusahaan}, {email_perusahaan}, {nama_admin}
+
             $pesan_email_lolos = str_replace(
                 ['{nama_pelamar}', '{nama_posisi}', '{nama_perusahaan}', '{tanggal}', '{waktu}', '{alamat_perusahaan}', '{email_perusahaan}', '{nama_admin}'],
                 [$nama_pelamar, $nama_posisi, $nama_perusahaan, $tanggal, $waktu, $alamat_perusahaan, $email_perusahaan, $nama_admin],
                 $setting['pesan_email_lolos']
             );
+
             try {
                 // Config SMTP
                 $mail->isSMTP();
@@ -131,12 +163,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
                 $mail->send();
-                echo 'Message has been sent';
+                $msg = 'Berhasil mengirim email';
             } catch (Exception $e) {
-                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                $msg = 'Gagal mengirim email : ' . $mail->ErrorInfo;
             }
+
+            $dataEdit = [
+                'status_lamaran' => 1,
+                'tgl_interview' => $tanggal . ' ' . $waktu
+            ];
         } else {
-            echo 'Message has not been sent';
+
+            $dataEdit = [
+                'status_lamaran' => 2,
+            ];
+        }
+        $where = [
+            'id_lamaran' => $_POST['id_lamaran']
+        ];
+        $save = $lamaran->updateLamaran('lamaran', $dataEdit, $where);
+        if ($save) {
+            if ($_POST['status'] == 1) {
+                $msg = $msg;
+            } else {
+                $msg = 'Lamaran berhasil diUpdate';
+            }
+            echo json_encode([
+                'status' => 'success',
+                'title' => 'Berhasil',
+                'msg' => $msg
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'msg' => 'Gagal'
+            ]);
         }
     }
 }

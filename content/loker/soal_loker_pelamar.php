@@ -46,7 +46,8 @@ $checkJawaban = $testSkill->getJawabanByKaryawanAndLoker(['karyawan_id' => $_SES
                         <div class="col">
                             <div class="alert alert-success" role="alert">
                                 <p>Berkas Lamaran Anda sudah terupload.</p>
-                                <p>Silahkan tunggu proses seleksi berikutnya.</p>
+                                <p>Silahkan tunggu proses seleksi berikutnya dan cek sekala berkala email dan menu <i>Test dan Orientasi</i></p>
+                                <p></p>
                                 <a href="<?= $fileLamaran ?>" target="_blank" class="btn btn-sm btn-primary">Lihat Berkas Lamaran</a>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 <?php
-require_once 'classes/User.php';
+require_once 'classes/Lamaran.php';
+$lamaran = new Lamaran();
 ?>
 <!--breadcrumb-->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -9,76 +10,63 @@ require_once 'classes/User.php';
             <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="dashboard.php"><i class="bx bx-home-alt"></i></a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Daftar Karyawan Lolos</li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="?page=data_karyawan">Daftar Karyawan Lolos</a></li>
+                <?php if (isset($_GET['menu'])) : ?>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="?page=data_karyawan&menu=detail_lamaran&id=<?= $_GET['id'] ?>">Detail Lamaran</a></li>
+                <?php endif; ?>
             </ol>
         </nav>
     </div>
-    <div class="ms-auto">
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary">Settings</button>
-            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end"> <a class="dropdown-item" href="javascript:;">Action</a>
-                <a class="dropdown-item" href="javascript:;">Another action</a>
-                <a class="dropdown-item" href="javascript:;">Something else here</a>
-                <div class="dropdown-divider"></div> <a class="dropdown-item" href="javascript:;">Separated link</a>
-            </div>
-        </div>
-    </div>
 </div>
 <!--end breadcrumb-->
-<div class="row">
-    <div class="card radius-10">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="table-list-user" class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Nama</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <?php
-                    $users = new User();
-                    $no = 1;
-                    ?>
-                    <tbody>
-                        <?php foreach ($users->getAllUserAccount() as $user) : ?>
+<?php if (isset($_GET['menu'])) : ?>
+    <?php include 'content/show-detail-lamaran.php'; ?>
+<?php else : ?>
+    <div class="row">
+        <div class="card radius-10">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="table-lamaran-lolos" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Nama</th>
+                                <th>Posisi</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <?php
+                        $no = 1;
+                        $lamarans = $lamaran->getAllLamaran('where lam.status_lamaran = 1');
+                        ?>
+                        <?php foreach ($lamarans as $lamar) : ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><?= $user['username'] ?></td>
-                                <td><?= $user['email'] ?></td>
-                                <td><?= $user['nama_user'] ?></td>
-                                <td><?= $user['nama_role'] ?></td>
+                                <td><?= $lamar['email'] ?></td>
+                                <td><?= $lamar['username'] ?></td>
+                                <td><?= ucwords($lamar['nama']) ?></td>
+                                <td><?= ucwords($lamar['nama_posisi']) ?></td>
                                 <td>
-                                    <?php if ($user['is_active'] == 1) : ?>
-                                        <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Active</div>
-                                    <?php else : ?>
-                                        <div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class="bx bxs-circle me-1"></i>Non-Active</div>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <?php if ($user['is_active'] == 1) : ?>
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail user" onclick="detailUser('<?= $user['id_user'] ?>', '<?= $user['id_role'] ?>')"><i class="bx bx-info-circle"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="non-aktifkan" onclick="userActivation('<?= $user['id_user'] ?>', 0)"><i class="bx bx-user-x"></i>
-                                            </button>
-                                        </div>
-                                    <?php else : ?>
-                                        <a href="javascript:;" class="text-primary fs-4" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="aktifkan" onclick="userActivation('<?= $user['id_user'] ?>', 1)"><i class="bx bx-rotate-left"></i></a>
-                                    <?php endif; ?>
+                                    <a href="?page=data_karyawan&menu=detail_lamaran&id=<?= $lamar['id_lamaran'] ?>" class="btn btn-sm btn-primary">Detail</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
-                    </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
+<?php endif; ?>
+<script>
+    $(document).ready(function() {
+        var table = $('#table-lamaran-lolos').DataTable({
+            lengthChange: false,
+            buttons: ['copy', 'excel', 'pdf', 'print']
+        });
+
+        table.buttons().container()
+            .appendTo('#table-lamaran-lolos_wrapper .col-md-6:eq(0)');
+    });
+</script>
