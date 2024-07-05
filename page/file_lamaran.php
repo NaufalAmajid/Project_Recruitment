@@ -71,7 +71,12 @@ require_once 'classes/Lamaran.php'
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                            <?php if ($lamar['status_lamaran'] == 2 || $lamar['status_lamaran'] == 1) : ?>
+                                            <?php if ($lamar['status_lamaran'] == 1) : ?>
+                                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="kirim email" onclick="sendMailOrientasi('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-mail-send"></i>
+                                                </button>
+                                            <?php elseif ($lamar['status_lamaran'] == 2) : ?>
                                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
                                                 </button>
                                             <?php else : ?>
@@ -153,5 +158,20 @@ require_once 'classes/Lamaran.php'
                 }
             });
         })
+    }
+
+    function sendMailOrientasi(id_lamaran) {
+        $.ajax({
+            url: 'content/modal-pesan-mail.php',
+            type: 'POST',
+            data: {
+                id_lamaran: id_lamaran,
+                action: 'sendMailOrientasi'
+            },
+            success: function(response) {
+                $('#myModal').html(response);
+                $('#myModal').modal('show');
+            }
+        });
     }
 </script>
