@@ -230,7 +230,7 @@ $func = new Functions();
 		<a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
 		<!--End Back To Top Button-->
 		<footer class="page-footer">
-			<p class="mb-0">Copyright &copy; <?= date('Y') ?>. By NaufalAmajid.</p>
+			<p class="mb-0">Copyright &copy; <?= date('Y') ?>. By Dita Mahameru.</p>
 		</footer>
 	</div>
 	<!--end wrapper-->
