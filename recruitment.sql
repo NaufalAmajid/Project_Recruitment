@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 04 Jul 2024 pada 15.48
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Waktu pembuatan: 17 Jul 2024 pada 17.09
+-- Versi server: 10.4.28-MariaDB
+-- Versi PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -320,15 +320,19 @@ CREATE TABLE `setting` (
   `alamat_perusahaan` text DEFAULT NULL,
   `email_perusahaan` varchar(100) DEFAULT NULL,
   `password_smtp` varchar(100) DEFAULT NULL,
-  `pesan_email_lolos` text DEFAULT NULL
+  `pesan_email_lolos` text DEFAULT NULL,
+  `kontak` text NOT NULL,
+  `visi` text NOT NULL,
+  `misi` text NOT NULL,
+  `profil_perusahaan` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `setting`
 --
 
-INSERT INTO `setting` (`id`, `nama_perusahaan`, `alamat_perusahaan`, `email_perusahaan`, `password_smtp`, `pesan_email_lolos`) VALUES
-(1, 'PT. ABCDEFG', 'Jakarta Selatan, RT/RW 01/03', 'zaraaari11@gmail.com', 'ejdommtzniabltqw', 'Kepada Yth. {nama_pelamar},\r\n\r\nTerima kasih telah melamar posisi {nama_posisi} di {nama_perusahaan}. Kami sangat senang menginformasikan bahwa Anda telah lolos seleksi berkas lamaran dan kami ingin mengundang Anda untuk mengikuti tahap selanjutnya dalam proses rekrutmen.\r\n\r\nBerikut adalah detail tahap selanjutnya:\r\n\r\nTahap: Interview dan Test Orientasi\r\nTanggal: {tanggal}\r\nWaktu: {waktu}\r\nTempat: {alamat_perusahaan}\r\n\r\nKami berharap Anda dapat hadir pada waktu yang telah ditentukan. Jika Anda memiliki pertanyaan atau membutuhkan informasi lebih lanjut, jangan ragu untuk menghubungi kami di {email_perusahaan}.\r\n\r\nTerima kasih atas perhatian Anda dan kami menantikan kehadiran Anda.\r\n\r\nSalam Hormat,\r\n\r\n{nama_admin}\r\nAdmin {nama_perusahaan}');
+INSERT INTO `setting` (`id`, `nama_perusahaan`, `alamat_perusahaan`, `email_perusahaan`, `password_smtp`, `pesan_email_lolos`, `kontak`, `visi`, `misi`, `profil_perusahaan`) VALUES
+(1, 'PT. Sri Rejeki TBK', 'Jl. KH. Samanhudi 88, Jetis, Sukoharjo, Solo – Central Java Indonesia', 'zaraaari11@gmail.com', 'ejdommtzniabltqw', 'Kepada Yth. {nama_pelamar},\r\n\r\nTerima kasih telah melamar posisi {nama_posisi} di {nama_perusahaan}. Kami sangat senang menginformasikan bahwa Anda telah lolos seleksi berkas lamaran dan kami ingin mengundang Anda untuk mengikuti tahap selanjutnya dalam proses rekrutmen.\r\n\r\nBerikut adalah detail tahap selanjutnya:\r\n\r\nTahap: Interview dan Test Orientasi\r\nTanggal: {tanggal}\r\nWaktu: {waktu}\r\nTempat: {alamat_perusahaan}\r\n\r\nKami berharap Anda dapat hadir pada waktu yang telah ditentukan. Jika Anda memiliki pertanyaan atau membutuhkan informasi lebih lanjut, jangan ragu untuk menghubungi kami di {email_perusahaan}.\r\n\r\nTerima kasih atas perhatian Anda dan kami menantikan kehadiran Anda.\r\n\r\nSalam Hormat,\r\n\r\n{nama_admin}\r\nAdmin {nama_perusahaan}', 'Perusahaan & Kompleks Produksi\r\nJl. KH. Samanhudi 88, Jetis, Sukoharjo, Solo – Central Java\r\nIndonesia\r\nPhone: (62 – 271) 593188\r\nFax: (62 – 271) 593488, 591788', 'Menjadi produsen tekstil dan garmen global terbesar, paling terkemuka, dan tepercaya', '1. Untuk memberikan produk paling inovatif sesuai dengan kebutuhan dan keinginan konsumen.\r\n2. Menjadi perusahaan yang menguntungkan dan berorientasi pada pertumbuhan untuk semua kepentingan pemangku kepentingan\r\n3. Untuk menyediakan dan memelihara lingkungan kerja yang kondusif bagi karyawan kami.\r\n4. Memberikan kontribusi dan peningkatan nilai bagi masyarakat sekitar', 'Tahun 1966 - Didirikan oleh H.M Lukminto sebagai perusahaan perdagangan tradisional di Pasar Klewer, Solo.\r\nTahun 1968 - Membuka pabrik cetak pertamanya yang menghasilkan kain putih dan berwarna di Solo. \r\nTahun 1982 - Mendirikan pabrik tenun pertama. \r\nTahun 1992 - Memperluas pabrik dengan 4 divisi produksi dalam satu atap.');
 
 -- --------------------------------------------------------
 

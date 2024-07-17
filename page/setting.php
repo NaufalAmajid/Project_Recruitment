@@ -50,10 +50,42 @@ $setting = $setting->getSetting();
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-2">
+                                    <h6 class="mb-0">Kontak</h6>
+                                </div>
+                                <div class="col-sm-10 text-secondary">
+                                <textarea class="form-control" rows="5" id="kontak" name="kontak"><?= $setting['kontak'] ?></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-2">
                                     <h6 class="mb-0">Password SMTP</h6>
                                 </div>
                                 <div class="col-sm-10 text-secondary">
                                     <input type="text" class="form-control" id="password_smtp" name="password_smtp" value="<?= $setting['password_smtp'] ?>">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">Visi</h6>
+                                </div>
+                                <div class="col-sm-10 text-secondary">
+                                    <textarea class="form-control" rows="10" id="visi" name="visi"><?= $setting['visi'] ?></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">Misi</h6>
+                                </div>
+                                <div class="col-sm-10 text-secondary">
+                                    <textarea class="form-control" rows="10" id="misi" name="misi"><?= $setting['misi'] ?></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-2">
+                                    <h6 class="mb-0">Profil Perusahaan</h6>
+                                </div>
+                                <div class="col-sm-10 text-secondary">
+                                    <textarea class="form-control" rows="10" id="profil_perusahaan" name="profil_perusahaan"><?= $setting['profil_perusahaan'] ?></textarea>
                                 </div>
                             </div>
                             <div class="row mb-3">

@@ -38,7 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'alamat_perusahaan' => $_POST['alamat_perusahaan'],
             'email_perusahaan' => $_POST['email_perusahaan'],
             'password_smtp' => $_POST['password_smtp'],
-            'pesan_email_lolos' => $_POST['pesan_email_lolos']
+            'pesan_email_lolos' => $_POST['pesan_email_lolos'],
+            'kontak' => $_POST['kontak'],
+            'visi' => $_POST['visi'],
+            'misi' => $_POST['misi'],
+            'profil_perusahaan' => $_POST['profil_perusahaan'],
         ];
         $where = [
             'id' => 1
