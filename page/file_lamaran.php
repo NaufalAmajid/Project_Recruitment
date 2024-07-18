@@ -50,7 +50,7 @@ require_once 'classes/Lamaran.php'
                         $no = 1;
                         ?>
                         <tbody>
-                            <?php foreach ($lamarans->getAllLamaran() as $lamar) : ?>
+                            <?php foreach ($lamarans->getAllLamaran('where lam.status_lamaran = 1') as $lamar) : ?>
                                 <tr>
                                     <td><?= $no++ ?></td>
                                     <td><?= $lamar['email'] ?></td>
@@ -114,15 +114,14 @@ require_once 'classes/Lamaran.php'
     function sendMail(id_lamaran) {
         Swal.fire({
             title: 'Kirim Email',
-            text: 'Apakah lamaran ini lolos?, Lamaran yang lolos akan mendapatkan email pemberitahuan.',
+            text: 'Apakah Anda yakin ingin mengirim email ke pelamar ini?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#00c407',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Lolos',
-            cancelButtonText: 'Tidak Lolos'
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
         }).then((result) => {
-            let status = result.isConfirmed ? 1 : 0;
             $.ajax({
                 url: 'classes/Lamaran.php',
                 type: 'POST',

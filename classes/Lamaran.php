@@ -127,9 +127,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lamaran = new Lamaran();
 
     if ($_POST['action'] == 'selectionFileLamaran') {
+        $tglInterview = date('Y-m-d', strtotime('+7 days'));
+        $timeInterview = '09:00';
+
         $data = [
-            'status_lamaran' => $_POST['status']
+            'status_lamaran' => $_POST['status'],
         ];
+
+        if ($_POST['status'] == 1) {
+            $data['tgl_interview'] = $tglInterview . ' ' . $timeInterview;
+        }
+
+        $where = [
+            'id_lamaran' => $_POST['id_lamaran']
+        ];
+        $save = $lamaran->updateLamaran('lamaran', $data, $where);
+        if ($save) {
+            echo json_encode([
+                'status' => 'success',
+                'title' => 'Berhasil',
+                'msg' => 'Lamaran berhasil diUpdate'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'msg' => 'Gagal'
+            ]);
+        }
+    }
+
+    if ($_POST['action'] == 'unPassedLamaran') {
+        $data = [
+            'status_lamaran' => 0,
+            'tgl_interview' => null
+        ];
+
         $where = [
             'id_lamaran' => $_POST['id_lamaran']
         ];
@@ -150,83 +183,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($_POST['action'] == 'sendMail') {
-        if ($_POST['status'] == 1) {
-            $mail = new PHPMailer(true);
-            $detailLamaran = $lamaran->getLamaranById($_POST['id_lamaran']);
-            $setting = $lamaran->getSetting();
-            $nama_pelamar = ucwords($detailLamaran['nama']);
-            $nama_posisi = ucwords($detailLamaran['nama_posisi']);
-            $nama_perusahaan = $setting['nama_perusahaan'];
-            $tanggal = date('Y-m-d', strtotime('+7 days'));
-            $waktu = '09:00';
-            $alamat_perusahaan = $setting['alamat_perusahaan'];
-            $email_perusahaan = $setting['email_perusahaan'];
-            $nama_admin = ucwords($_SESSION['user']['nama_user']);
+        $mail = new PHPMailer(true);
+        $detailLamaran = $lamaran->getLamaranById($_POST['id_lamaran']);
+        $setting = $lamaran->getSetting();
+        $nama_pelamar = ucwords($detailLamaran['nama']);
+        $nama_posisi = ucwords($detailLamaran['nama_posisi']);
+        $nama_perusahaan = $setting['nama_perusahaan'];
+        $tanggal = date('Y-m-d', strtotime('+7 days'));
+        $waktu = '09:00';
+        $alamat_perusahaan = $setting['alamat_perusahaan'];
+        $email_perusahaan = $setting['email_perusahaan'];
+        $nama_admin = ucwords($_SESSION['user']['nama_user']);
 
-            $pesan_email_lolos = str_replace(
-                ['{nama_pelamar}', '{nama_posisi}', '{nama_perusahaan}', '{tanggal}', '{waktu}', '{alamat_perusahaan}', '{email_perusahaan}', '{nama_admin}'],
-                [$nama_pelamar, $nama_posisi, $nama_perusahaan, $tanggal, $waktu, $alamat_perusahaan, $email_perusahaan, $nama_admin],
-                $setting['pesan_email_lolos']
-            );
+        $pesan_email_lolos = str_replace(
+            ['{nama_pelamar}', '{nama_posisi}', '{nama_perusahaan}', '{tanggal}', '{waktu}', '{alamat_perusahaan}', '{email_perusahaan}', '{nama_admin}'],
+            [$nama_pelamar, $nama_posisi, $nama_perusahaan, $tanggal, $waktu, $alamat_perusahaan, $email_perusahaan, $nama_admin],
+            $setting['pesan_email_lolos']
+        );
 
-            try {
-                // Config SMTP
-                $mail->isSMTP();
-                $mail->Host       = 'smtp.gmail.com'; // Host SMTP Gmail
-                $mail->SMTPAuth   = true;
-                $mail->Username   = $setting['email_perusahaan'];
-                $mail->Password   = $setting['password_smtp'];
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port       = 587;
+        try {
+            // Config SMTP
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com'; // Host SMTP Gmail
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $setting['email_perusahaan'];
+            $mail->Password   = $setting['password_smtp'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
 
-                // To
-                $mail->setFrom($setting['email_perusahaan'], $setting['nama_perusahaan']);
-                $mail->addAddress($detailLamaran['email'], $detailLamaran['nama']);
+            // To
+            $mail->setFrom($setting['email_perusahaan'], $setting['nama_perusahaan']);
+            $mail->addAddress($detailLamaran['email'], $detailLamaran['nama']);
 
-                // Content
-                $mail->isHTML(true);
-                $mail->Subject = 'Lamaran Diterima';
-                $mail->Body    =  nl2br(str_replace(' ', '  ', htmlspecialchars($pesan_email_lolos)));
-                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Lamaran Diterima';
+            $mail->Body    =  nl2br(str_replace(' ', '  ', htmlspecialchars($pesan_email_lolos)));
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-                $mail->send();
-                $msg = 'Berhasil mengirim email';
-            } catch (Exception $e) {
-                $msg = 'Gagal mengirim email : ' . $mail->ErrorInfo;
-            }
-
-            $dataEdit = [
-                'status_lamaran' => 1,
-                'tgl_interview' => $tanggal . ' ' . $waktu
-            ];
-        } else {
-
-            $dataEdit = [
-                'status_lamaran' => 2,
-            ];
-        }
-        $where = [
-            'id_lamaran' => $_POST['id_lamaran']
-        ];
-        $save = $lamaran->updateLamaran('lamaran', $dataEdit, $where);
-        if ($save) {
-            if ($_POST['status'] == 1) {
-                $msg = $msg;
-            } else {
-                $msg = 'Lamaran berhasil diUpdate';
-            }
-            echo json_encode([
+            $mail->send();
+            $res = [
                 'status' => 'success',
                 'title' => 'Berhasil',
-                'msg' => $msg
-            ]);
-        } else {
-            echo json_encode([
+                'msg' => 'Berhasil mengirim email'
+            ];
+        } catch (Exception $e) {
+            $res = [
                 'status' => 'error',
                 'title' => 'Gagal',
-                'msg' => 'Gagal'
-            ]);
+                'msg' => 'Gagal mengirim email : ' . $mail->ErrorInfo
+            ];
         }
+        echo json_encode($res);
     }
 
     if ($_POST['action'] == 'sendMailOrientasi') {

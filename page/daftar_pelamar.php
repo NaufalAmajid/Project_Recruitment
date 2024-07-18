@@ -74,10 +74,12 @@ require_once 'classes/Lamaran.php'
                                             <?php if ($lamar['status_lamaran'] == 1) : ?>
                                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="kirim email" onclick="sendMailOrientasi('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-mail-send"></i>
+                                                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="batal lolos" onclick="unPassedLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-revision"></i>
                                                 </button>
                                             <?php elseif ($lamar['status_lamaran'] == 2) : ?>
                                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="batal tidak lolos" onclick="unPassedLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-revision"></i>
                                                 </button>
                                             <?php else : ?>
                                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
@@ -125,8 +127,8 @@ require_once 'classes/Lamaran.php'
             denyButtonText: 'Tidak Lolos',
             cancelButtonText: 'Batal'
         }).then((result) => {
-            let status = result.isConfirmed ? 1 : (result.isDenied ? 0 : 2);
-            if (status == 2) return;
+            let status = result.isConfirmed ? 1 : (result.isDenied ? 2 : 0);
+            if (status == 0) return;
             $.ajax({
                 url: 'classes/Lamaran.php',
                 type: 'POST',
@@ -164,17 +166,38 @@ require_once 'classes/Lamaran.php'
         })
     }
 
-    function sendMailOrientasi(id_lamaran) {
+    function unPassedLamaran(id_lamaran) {
         $.ajax({
-            url: 'content/modal-pesan-mail.php',
+            url: 'classes/Lamaran.php',
             type: 'POST',
             data: {
                 id_lamaran: id_lamaran,
-                action: 'sendMailOrientasi'
+                action: 'unPassedLamaran'
+            },
+            beforeSend: function() {
+                Swal.fire({
+                    title: 'Loading...',
+                    html: 'Mohon tunggu sebentar',
+                    didOpen: () => {
+                        Swal.showLoading()
+                    },
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
             },
             success: function(response) {
-                $('#myModal').html(response);
-                $('#myModal').modal('show');
+                var data = JSON.parse(response);
+                Swal.fire({
+                    icon: data.status,
+                    title: data.title,
+                    text: data.msg,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then((e) => {
+                    if (e.dismiss === Swal.DismissReason.timer) {
+                        location.reload();
+                    }
+                });
             }
         });
     }

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 17 Jul 2024 pada 17.09
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.2.4
+-- Waktu pembuatan: 18 Jul 2024 pada 08.40
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -89,7 +89,8 @@ CREATE TABLE `detail_karyawan` (
 
 INSERT INTO `detail_karyawan` (`id_karyawan`, `user_id`, `nama`, `nik`, `alamat`, `jenkel`, `tempat_lahir`, `tanggal_lahir`, `no_hp`, `status_karyawan`, `posisi_id`) VALUES
 (1, 7, 'Bram Stoker', '00340000345', 'Solo', 'Laki-laki', 'Surakarta', '2008-01-02', '789789', NULL, NULL),
-(2, 8, 'margaret mitchell', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(2, 8, 'margaret mitchell', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 9, 'akutagawa ryounosuke', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -143,7 +144,8 @@ INSERT INTO `hak_akses` (`id_hak_akses`, `role_id`, `menu_id`) VALUES
 (9, 1, 8),
 (10, 2, 8),
 (11, 3, 8),
-(12, 1, 9);
+(12, 1, 9),
+(13, 2, 10);
 
 -- --------------------------------------------------------
 
@@ -190,7 +192,7 @@ CREATE TABLE `lamaran` (
 --
 
 INSERT INTO `lamaran` (`id_lamaran`, `loker_id`, `karyawan_id`, `file_lamaran`, `status_lamaran`, `created_at`, `tgl_interview`) VALUES
-(1, 2, 1, 'berkas_1_2.pdf', 0, '2024-07-03 11:58:30', '2024-07-11 09:00:00'),
+(1, 2, 1, 'berkas_1_2.pdf', 1, '2024-07-03 11:58:30', '2024-07-25 09:00:00'),
 (3, 1, 1, 'berkas_1_1.pdf', 0, '2024-07-03 12:01:36', NULL);
 
 -- --------------------------------------------------------
@@ -217,7 +219,8 @@ INSERT INTO `loker` (`id_loker`, `posisi_id`, `divisi_id`, `jumlah_kebutuhan`, `
 (1, 8, 5, 2, 'Test\r\n- adad\r\n- adwqdq\r\n- msfwf', 1, '2024-06-27 10:54:40'),
 (2, 4, 6, 4, '-Pendidikan minimal S1 di bidang Marketing, Bisnis, atau setara\r\n\r\n-Pengalaman kerja minimal 2 tahun di bidang pemasaran\r\n\r\n-Memiliki kemampuan analitis dan komunikasi yang baik\r\n\r\n-Menguasai penggunaan alat-alat pemasaran digital\r\n\r\n-Kreatif, inovatif, dan mampu bekerja di bawah tekanan', 1, '2024-06-27 11:24:27'),
 (3, 14, 4, 5, 'LASDQDSDF', 0, '2024-06-27 11:34:16'),
-(4, 20, 3, 1, 'ASDXVXVW', 0, '2024-06-27 11:34:58');
+(4, 20, 3, 1, 'ASDXVXVW', 0, '2024-06-27 11:34:58'),
+(5, 16, 3, 7, 'Deskripsi Pekerjaan:\r\n\r\nMenjaga keamanan dan ketertiban area kerja.\r\nMelakukan patroli rutin di sekitar area yang ditugaskan.\r\nMengawasi keluar masuknya orang dan kendaraan.\r\nMelaporkan kejadian yang mencurigakan kepada atasan.\r\nMengendalikan dan mengoperasikan peralatan keamanan.\r\n\r\nPersyaratan:\r\n\r\nPendidikan: Minimal SMA/SMK sederajat.\r\nUsia: 20-35 tahun.\r\nPengalaman: Minimal 1 tahun sebagai security (lebih diutamakan).\r\nKesehatan: Sehat jasmani dan rohani, bebas narkoba (dibuktikan dengan surat keterangan dokter).', 1, '2024-07-18 13:31:25');
 
 -- --------------------------------------------------------
 
@@ -229,21 +232,23 @@ CREATE TABLE `menu` (
   `id_menu` int(11) NOT NULL,
   `nama_menu` varchar(20) DEFAULT NULL,
   `direktori` varchar(20) DEFAULT NULL,
-  `icon` varchar(50) DEFAULT NULL
+  `icon` varchar(50) DEFAULT NULL,
+  `order` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `menu`
 --
 
-INSERT INTO `menu` (`id_menu`, `nama_menu`, `direktori`, `icon`) VALUES
-(1, 'lowongan kerja', 'lowongan_kerja', 'bx bx-news'),
-(2, 'tes & orientasi', 'tes_orientasi', 'bx bx-calendar-edit'),
-(4, 'data karyawan', 'data_karyawan', 'bx bx-body'),
-(5, 'file lamaran', 'file_lamaran', 'bx bx-file-find'),
-(7, 'master', 'master', 'bx bx-layer'),
-(8, 'profile', 'profile', 'bx bx-user-circle'),
-(9, 'setting', 'setting', 'bx bx-cog');
+INSERT INTO `menu` (`id_menu`, `nama_menu`, `direktori`, `icon`, `order`) VALUES
+(1, 'lowongan kerja', 'lowongan_kerja', 'bx bx-news', 2),
+(2, 'tes & orientasi', 'tes_orientasi', 'bx bx-calendar-edit', 1),
+(4, 'data karyawan', 'data_karyawan', 'bx bx-body', 3),
+(5, 'file lamaran', 'file_lamaran', 'bx bx-file-find', 2),
+(7, 'master', 'master', 'bx bx-layer', 1),
+(8, 'profile', 'profile', 'bx bx-user-circle', 4),
+(9, 'setting', 'setting', 'bx bx-cog', 9),
+(10, 'daftar pelamar', 'daftar_pelamar', 'bx bx-archive-in', 1);
 
 -- --------------------------------------------------------
 
@@ -354,8 +359,10 @@ INSERT INTO `soal` (`id_soal`, `loker_id`, `soal`) VALUES
 (4, 2, 'Apa itu variable?'),
 (5, 2, 'jelaskan mengenai framework?'),
 (6, 2, 'sebutkan framework javascript?'),
-(7, 1, 'Deskripsikan diri anda?'),
-(8, 1, 'apa kekurangan dan kelebihan anda?');
+(7, 1, 'Deskripsikan diri anda 123?'),
+(8, 1, 'apa kekurangan dan kelebihan anda?'),
+(9, 5, 'Apa yang harus dilakukan jika menemukan orang yang mencurigakan di area kerja?'),
+(10, 5, 'Apa fungsi utama dari CCTV dalam sistem keamanan?');
 
 -- --------------------------------------------------------
 
@@ -405,7 +412,8 @@ INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `role_id`, `phot
 (5, 'atsushi', 'atsushi@gmail.com', '250cf8b51c773f3f8dc8b4be867a9a02', 1, 'nakajimaatsushi_5.jpg', 1),
 (6, 'akutagawa', 'akutagawa@gmail.com', '202cb962ac59075b964b07152d234b70', 1, NULL, 0),
 (7, 'bram', 'naufalamajid@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 'bramstoker_7.jpg', 1),
-(8, 'margaret', 'margaret@gmail.com', '202cb962ac59075b964b07152d234b70', 3, NULL, 1);
+(8, 'margaret', 'margaret@gmail.com', '202cb962ac59075b964b07152d234b70', 3, NULL, 1),
+(9, 'ryounosuke', 'ryounosuke@gmail.com', '568a082a2542c2eddd1c433f12d0a54c', 3, NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -537,7 +545,7 @@ ALTER TABLE `detail_hrd`
 -- AUTO_INCREMENT untuk tabel `detail_karyawan`
 --
 ALTER TABLE `detail_karyawan`
-  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `divisi`
@@ -549,7 +557,7 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT untuk tabel `hak_akses`
 --
 ALTER TABLE `hak_akses`
-  MODIFY `id_hak_akses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_hak_akses` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `jawaban`
@@ -567,13 +575,13 @@ ALTER TABLE `lamaran`
 -- AUTO_INCREMENT untuk tabel `loker`
 --
 ALTER TABLE `loker`
-  MODIFY `id_loker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_loker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `posisi`
@@ -597,7 +605,7 @@ ALTER TABLE `setting`
 -- AUTO_INCREMENT untuk tabel `soal`
 --
 ALTER TABLE `soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT untuk tabel `submenu`
@@ -609,7 +617,7 @@ ALTER TABLE `submenu`
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

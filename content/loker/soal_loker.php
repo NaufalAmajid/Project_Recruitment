@@ -25,7 +25,7 @@ $lokerById = $lokers->getLokerById($_GET['id']);
                     </li>
                     <li class="list-group-item">
                         <h6 class="text-muted">Deskripsi</h6>
-                        <textarea class="form-control" rows="<?= substr_count($lokerById['deskripsi'], "\n") + 5 ?>" readonly><?= $lokerById['deskripsi'] ?></textarea>
+                        <p><?= nl2br($lokerById['deskripsi']) ?></p>
                     </li>
                 </ul>
             </div>
