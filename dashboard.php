@@ -22,7 +22,7 @@ $func = new Functions();
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+	<link rel="icon" href="assets/images/logo-company.png" type="image/png" />
 	<!--plugins-->
 	<link href="assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
 	<link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
@@ -74,7 +74,7 @@ $func = new Functions();
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
 				<div>
-					<img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
+					<img src="assets/images/logo-company.png" class="logo-icon" alt="logo icon">
 				</div>
 				<div>
 					<h4 class="logo-text">E-Recruitment</h4>

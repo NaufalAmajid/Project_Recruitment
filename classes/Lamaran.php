@@ -125,6 +125,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     session_start();
 
     $lamaran = new Lamaran();
+
+    if ($_POST['action'] == 'selectionFileLamaran') {
+        $data = [
+            'status_lamaran' => $_POST['status']
+        ];
+        $where = [
+            'id_lamaran' => $_POST['id_lamaran']
+        ];
+        $save = $lamaran->updateLamaran('lamaran', $data, $where);
+        if ($save) {
+            echo json_encode([
+                'status' => 'success',
+                'title' => 'Berhasil',
+                'msg' => 'Lamaran berhasil diUpdate'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'title' => 'Gagal',
+                'msg' => 'Gagal'
+            ]);
+        }
+    }
+
     if ($_POST['action'] == 'sendMail') {
         if ($_POST['status'] == 1) {
             $mail = new PHPMailer(true);

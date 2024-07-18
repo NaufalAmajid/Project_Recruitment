@@ -13,7 +13,7 @@ if (isset($_SESSION['is_login'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
-    <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+    <link rel="icon" href="assets/images/logo-company.png" type="image/png" />
     <!--plugins-->
     <link href="assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
     <link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
@@ -49,7 +49,7 @@ if (isset($_SESSION['is_login'])) {
                             <div class="card-body p-sm-5">
                                 <div class="">
                                     <div class="mb-3 text-center">
-                                        <img src="assets/images/logo-icon.png" width="60" alt="">
+                                        <img src="assets/images/logo-company.png" width="160" alt="">
                                     </div>
                                     <div class="text-center mb-4">
                                         <h5 class="">E - RECRUITMENT</h5>
@@ -82,6 +82,7 @@ if (isset($_SESSION['is_login'])) {
                                                 <label for="password" class="form-label">Password</label>
                                                 <div class="input-group" id="show_hide_password">
                                                     <input type="password" class="form-control border-end-0" id="password" name="password" placeholder="password ..."> <a href="javascript:;" class="input-group-text bg-transparent"><i class="bx bx-hide"></i></a>
+                                                    <small class="text-muted">Password harus kombinasi huruf besar, huruf kecil, angka dan simbol (minimal 8 karakter)</small>
                                                 </div>
                                             </div>
                                             <div class="col-6">

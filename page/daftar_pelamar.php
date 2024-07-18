@@ -9,9 +9,9 @@ require_once 'classes/Lamaran.php'
             <ol class="breadcrumb mb-0 p-0">
                 <li class="breadcrumb-item"><a href="dashboard.php"><i class="bx bx-home-alt"></i></a>
                 </li>
-                <li class="breadcrumb-item" aria-current="page"><a href="?page=file_lamaran">Daftar Lamaran Diterima</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="?page=daftar_pelamar">Daftar Pelamar</a></li>
                 <?php if (isset($_GET['menu'])) : ?>
-                    <li class="breadcrumb-item active" aria-current="page"><a href="?page=file_lamaran&menu=detail_lamaran&id=<?= $_GET['id'] ?>">Detail Lamaran</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="?page=daftar_pelamar&menu=detail_lamaran&id=<?= $_GET['id'] ?>">Detail Lamaran</a></li>
                 <?php endif; ?>
             </ol>
         </nav>
@@ -26,7 +26,7 @@ require_once 'classes/Lamaran.php'
             <div class="card-header">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h6 class="mb-0">List Lamaran Masuk Yang Lolos Dari HRD</h6>
+                        <h6 class="mb-0">List Lamaran Masuk</h6>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@ require_once 'classes/Lamaran.php'
                                             <?php else : ?>
                                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="detail lamaran" onclick="detailLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-file"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="kirim email" onclick="sendMail('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-mail-send"></i>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="seleksi lamaran" onclick="selectionFileLamaran('<?= $lamar['id_lamaran'] ?>')"><i class="bx bx-message-square-edit"></i>
                                                 </button>
                                             <?php endif; ?>
                                         </div>
@@ -108,28 +108,32 @@ require_once 'classes/Lamaran.php'
     });
 
     function detailLamaran(id) {
-        window.location.href = `dashboard.php?page=file_lamaran&menu=detail_lamaran&id=${id}`;
+        window.location.href = `dashboard.php?page=daftar_pelamar&menu=detail_lamaran&id=${id}`;
     }
 
-    function sendMail(id_lamaran) {
+    function selectionFileLamaran(id_lamaran) {
         Swal.fire({
-            title: 'Kirim Email',
-            text: 'Apakah lamaran ini lolos?, Lamaran yang lolos akan mendapatkan email pemberitahuan.',
+            title: 'Seleksi Lamaran',
+            text: 'Apakah lamaran ini lolos atau tidak lolos?',
             icon: 'warning',
             showCancelButton: true,
+            showDenyButton: true,
             confirmButtonColor: '#00c407',
             cancelButtonColor: '#d33',
+            denyButtonColor: '#ffcc00',
             confirmButtonText: 'Lolos',
-            cancelButtonText: 'Tidak Lolos'
+            denyButtonText: 'Tidak Lolos',
+            cancelButtonText: 'Batal'
         }).then((result) => {
-            let status = result.isConfirmed ? 1 : 0;
+            let status = result.isConfirmed ? 1 : (result.isDenied ? 0 : 2);
+            if (status == 2) return;
             $.ajax({
                 url: 'classes/Lamaran.php',
                 type: 'POST',
                 data: {
                     id_lamaran: id_lamaran,
                     status: status,
-                    action: 'sendMail'
+                    action: 'selectionFileLamaran'
                 },
                 beforeSend: function() {
                     Swal.fire({

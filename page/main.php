@@ -48,3 +48,21 @@ $setting  = $settings->getSetting();
         </div>
     </div>
 </div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2">
+    <div class="col">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title text-white">Profil Perusahaan</h5>
+                <p class="card-text"><?= nl2br($setting['profil_perusahaan']) ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <h5 class="card-title text-white">Kontak</h5>
+                <p class="card-text"><?= nl2br($setting['kontak']) ?></p>
+            </div>
+        </div>
+    </div>
+</div>

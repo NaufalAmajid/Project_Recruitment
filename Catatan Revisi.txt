@@ -1,0 +1,13 @@
+1. logo - diganti logo perusahaan X
+2. password - kombinasi huruf besar, kecil, dan angka X
+3. Hak akses - HRD : menyortir lolos tidaknya lamaran yg masuk
+                        - Admin : hanya mengirim email berisi jadwal tes
+4. hak akses pelamar
+       - pada menu loker, setelah upload file lamaran muncul tulisan wajib melakukan tes dasar skill.
+       - tambah menu tes dasar skill pada menu tes & orientasi. jawaban tiap soal dibatasi 150 huruf
+5. dashboard tiap hak akses ditambahi jangan kosong
+       - selamat datang di e-recruitment
+       - profil
+       - visi misi
+       - divisi
+       - kontak

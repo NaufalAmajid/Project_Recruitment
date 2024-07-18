@@ -13,7 +13,7 @@ if (isset($_SESSION['is_login'])) {
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+	<link rel="icon" href="assets/images/logo-company.png" type="image/png" />
 	<!--plugins-->
 	<link href="assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
 	<link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
@@ -49,7 +49,7 @@ if (isset($_SESSION['is_login'])) {
 							<div class="card-body p-sm-5">
 								<div class="">
 									<div class="mb-3 text-center">
-										<img src="assets/images/logo-icon.png" width="60" alt="">
+										<img src="assets/images/logo-company.png" width="160" alt="">
 									</div>
 									<div class="text-center mb-4">
 										<h5 class="">E - RECRUITMENT</h5>

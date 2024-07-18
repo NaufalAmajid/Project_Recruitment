@@ -53,7 +53,7 @@ $setting = $setting->getSetting();
                                     <h6 class="mb-0">Kontak</h6>
                                 </div>
                                 <div class="col-sm-10 text-secondary">
-                                <textarea class="form-control" rows="5" id="kontak" name="kontak"><?= $setting['kontak'] ?></textarea>
+                                    <textarea class="form-control" rows="5" id="kontak" name="kontak"><?= $setting['kontak'] ?></textarea>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -69,7 +69,7 @@ $setting = $setting->getSetting();
                                     <h6 class="mb-0">Visi</h6>
                                 </div>
                                 <div class="col-sm-10 text-secondary">
-                                    <textarea class="form-control" rows="10" id="visi" name="visi"><?= $setting['visi'] ?></textarea>
+                                    <textarea class="form-control" rows="<?= substr_count($setting['visi'], "\n") ?>" id="visi" name="visi"><?= $setting['visi'] ?></textarea>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -77,7 +77,7 @@ $setting = $setting->getSetting();
                                     <h6 class="mb-0">Misi</h6>
                                 </div>
                                 <div class="col-sm-10 text-secondary">
-                                    <textarea class="form-control" rows="10" id="misi" name="misi"><?= $setting['misi'] ?></textarea>
+                                    <textarea class="form-control" rows="<?= substr_count($setting['misi'], "\n") + 2 ?>" id="misi" name="misi"><?= $setting['misi'] ?></textarea>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -85,7 +85,7 @@ $setting = $setting->getSetting();
                                     <h6 class="mb-0">Profil Perusahaan</h6>
                                 </div>
                                 <div class="col-sm-10 text-secondary">
-                                    <textarea class="form-control" rows="10" id="profil_perusahaan" name="profil_perusahaan"><?= $setting['profil_perusahaan'] ?></textarea>
+                                    <textarea class="form-control" rows="<?= substr_count($setting['profil_perusahaan'], "\n") + 1 ?>" id="profil_perusahaan" name="profil_perusahaan"><?= $setting['profil_perusahaan'] ?></textarea>
                                 </div>
                             </div>
                             <div class="row mb-3">

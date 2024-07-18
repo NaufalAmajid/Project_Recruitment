@@ -27,7 +27,7 @@ class Menu
                 WHERE 
                     ha.role_id = :role_id
                 ORDER BY
-                    men.id_menu ASC";
+                    men.order ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':role_id', $role_id);
         $stmt->execute();
