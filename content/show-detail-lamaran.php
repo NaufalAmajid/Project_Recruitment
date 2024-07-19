@@ -62,7 +62,7 @@ $soals = $detailLamaran->getAllSoalByLokerAndPelamar(['loker_id' => $deLamaran['
             <div class="col-12">
                 <div class="card radius-10">
                     <div class="card-header">
-                        <h5 class="card-title">Test Soal Upload Berkas</h5>
+                        <h5 class="card-title">Test Dasar</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -78,7 +78,7 @@ $soals = $detailLamaran->getAllSoalByLokerAndPelamar(['loker_id' => $deLamaran['
                                         <tr>
                                             <td><?= $no++ ?></td>
                                             <td><?= $soal['soal'] ?></td>
-                                            <td><?= $soal['jawaban'] ?></td>
+                                            <td><?= nl2br($soal['jawaban']) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

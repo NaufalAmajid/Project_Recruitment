@@ -35,7 +35,7 @@ $checkJawaban = $testSkill->getJawabanByKaryawanAndLoker(['karyawan_id' => $_SES
     <div class="col-8">
         <div class="card radius-10">
             <div class="card-header">
-                <h5 class="card-title">Soal Test Skill <?= ucwords($lokerById['nama_posisi']) ?></h5>
+                <h5 class="card-title">Upload Berkas Lamaran</h5>
             </div>
             <div class="card-body">
                 <?php
@@ -53,65 +53,21 @@ $checkJawaban = $testSkill->getJawabanByKaryawanAndLoker(['karyawan_id' => $_SES
                         </div>
                     </div>
                 <?php else : ?>
-                    <div class="row mb-3">
+                    <div class="row justify-content-center">
                         <div class="col-12">
                             <input type="hidden" name="id_loker" id="id_loker" value="<?= $_GET['id'] ?>">
-                            <?php if ($checkJawaban['jawab'] > 0) : ?>
-                                <div class="alert alert-success" role="alert">
-                                    <p>Anda sudah menjawab soal test loker ini.
-                                        Silahkan upload Berkas Lamaran untuk melanjutkan proses seleksi.
-                                    </p>
-                                    <span class="text-danger">*Disarankan untuk upload dalam 1 file PDF</span>
-                                </div>
-                            <?php else : ?>
-                                <div class="table-responsive">
-                                    <table class="table table-borderless">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Soal</th>
-                                                <th>Jawab</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <form id="form-soal">
-                                                <?php $no = 1; ?>
-                                                <?php foreach ($testSkill->getAllTestByLoker($_GET['id']) as $soal) : ?>
-                                                    <tr>
-                                                        <td><?= $no++ ?></td>
-                                                        <td><?= $soal['soal'] ?></td>
-                                                        <td><input type="text" name="soal_<?= $soal['id_soal'] ?>" data-idsoal="<?= $soal['id_soal'] ?>" class="input-border-bottom" size="<?= strlen($soal['soal']) ?>"></td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                                <tr>
-                                                    <td colspan="3" align="center">
-                                                        <button type="button" class="btn btn-sm btn-success" onclick="saveJawaban()">Simpan</button>
-                                                        <button type="reset" class="btn btn-sm btn-danger">Reset</button>
-                                                    </td>
-                                                </tr>
-                                            </form>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php endif; ?>
+                            <div class="form-group mb-4">
+                                <center>
+                                    <img src="assets/images/image_placeholder.jpg" onclick="triggerClick(this)" alt="image-placeholder" id="image-placeholder" class="img-thumbnail" width="300" height="300">
+                                </center>
+                                <center>
+                                    <label for="file_berkas" id="label-laporan">Upload Berkas Diatas</label>
+                                </center>
+                                <input type="file" class="form-control d-none" onchange="displayFile(this)" id="file_berkas" name="file_berkas">
+                            </div>
+                            <button class="btn btn-primary col-md-12" id="btn-upload-berkas" type="button" onclick="uploadBerkas()">Upload Berkas</button>
                         </div>
                     </div>
-                    <?php if ($checkJawaban['jawab'] > 0) : ?>
-                        <div class="row justify-content-center">
-                            <div class="col-12">
-                                <div class="form-group mb-4">
-                                    <center>
-                                        <img src="assets/images/image_placeholder.jpg" onclick="triggerClick(this)" alt="image-placeholder" id="image-placeholder" class="img-thumbnail" width="300" height="300">
-                                    </center>
-                                    <center>
-                                        <label for="file_berkas" id="label-laporan">Upload Berkas Diatas</label>
-                                    </center>
-                                    <input type="file" class="form-control d-none" onchange="displayFile(this)" id="file_berkas" name="file_berkas">
-                                </div>
-                                <button class="btn btn-primary col-md-12" id="btn-upload-berkas" type="button" onclick="uploadBerkas()">Upload Berkas</button>
-                            </div>
-                        </div>
-                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>

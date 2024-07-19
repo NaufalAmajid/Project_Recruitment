@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 18 Jul 2024 pada 08.40
+-- Waktu pembuatan: 19 Jul 2024 pada 04.47
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -169,7 +169,9 @@ INSERT INTO `jawaban` (`id_jawaban`, `soal_id`, `karyawan_id`, `jawaban`) VALUES
 (2, 5, 1, 'tidak tau'),
 (3, 6, 1, 'tidak tau'),
 (4, 7, 1, 'test'),
-(5, 8, 1, '123');
+(5, 8, 1, '123'),
+(10, 9, 1, 'Jaga Jarak Aman: Jangan mendekati orang tersebut terlalu dekat. Jaga jarak aman untuk menghindari potensi bahaya.'),
+(11, 10, 1, 'Dalam lingkungan industri atau manufaktur, CCTV digunakan untuk memantau proses produksi dan memastikan bahwa prosedur keselamatan dipatuhi.');
 
 -- --------------------------------------------------------
 
@@ -193,7 +195,8 @@ CREATE TABLE `lamaran` (
 
 INSERT INTO `lamaran` (`id_lamaran`, `loker_id`, `karyawan_id`, `file_lamaran`, `status_lamaran`, `created_at`, `tgl_interview`) VALUES
 (1, 2, 1, 'berkas_1_2.pdf', 1, '2024-07-03 11:58:30', '2024-07-25 09:00:00'),
-(3, 1, 1, 'berkas_1_1.pdf', 0, '2024-07-03 12:01:36', NULL);
+(3, 1, 1, 'berkas_1_1.pdf', 0, '2024-07-03 12:01:36', NULL),
+(5, 5, 1, 'berkas_1_5.pdf', 0, '2024-07-19 08:45:27', NULL);
 
 -- --------------------------------------------------------
 
@@ -563,13 +566,13 @@ ALTER TABLE `hak_akses`
 -- AUTO_INCREMENT untuk tabel `jawaban`
 --
 ALTER TABLE `jawaban`
-  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_jawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT untuk tabel `lamaran`
 --
 ALTER TABLE `lamaran`
-  MODIFY `id_lamaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_lamaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `loker`
