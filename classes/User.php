@@ -91,10 +91,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return;
         }
 
+        // chek kombinasi Password harus kombinasi huruf besar, huruf kecil, angka dan simbol (minimal 8 karakter)
+        if (!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/', $_POST['password'])) {
+            echo json_encode(['status' => 'error', 'message' => 'Password harus kombinasi huruf besar, huruf kecil, angka dan simbol (minimal 8 karakter)', 'icon' => 'bx bx-error']);
+            exit;
+        }
+
         $insertUser = [
             'username' => $_POST['username'],
             'email' => $_POST['email'],
-            'password' => md5('123'),
+            'password' => md5($_POST['password']),
             'role_id' => $_POST['role_user'],
         ];
         $saveUser = $user->addUser('user', $insertUser);

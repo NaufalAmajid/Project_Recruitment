@@ -171,6 +171,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ];
         //check change password
         if ($_POST['real_password'] != '') {
+            // chek kombinasi Password harus kombinasi huruf besar, huruf kecil, angka dan simbol (minimal 8 karakter)
+            if (!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/', $_POST['change_password'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Password harus kombinasi huruf besar, huruf kecil, angka dan simbol (minimal 8 karakter)', 'icon' => 'bx bx-error']);
+                exit;
+            }
             $insertUser['password'] = md5($_POST['change_password']);
         }
         // end check change password

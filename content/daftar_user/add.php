@@ -32,10 +32,10 @@
             <label for="password" class="col-sm-3 col-form-label">Password</label>
             <div class="col-sm-9">
                 <div class="position-relative input-icon">
-                    <input type="password" class="form-control" id="password" value="123" name="password">
+                    <input type="password" class="form-control" id="password" value="Sritex66#" name="password">
                     <span class="position-absolute top-50 translate-middle-y"><i class='bx bx-lock'></i></span>
                 </div>
-                <small class="text-danger">*password default : 123</small>
+                <small class="text-danger" id="notif-pass-add-user">*password default : Sritex66#</small>
             </div>
         </div>
         <div class="row mb-3">
